@@ -36,6 +36,9 @@ decide; the AI plans, explains, builds and checks. Claude Code is the main tool.
 | `/lean` | Keeps notes, plans and code short. |
 | `/find-the-cause` | Something is broken: find why before fixing. |
 | `/brief-compliance-check` | Before calling a feature done: check it against the brief. |
+| `/frontend-design` | Make pages look designed, not generic: type, colour, layout. |
+| `/ux-copy` | Write buttons, empty-page messages and error text. |
+| `/accessibility-review` | Check the site works for people with poor eyesight or who use only a keyboard. |
 | `/grammar-check` | Proofread site text. |
 | `/retro` | End of a big session: suggest small rule updates. |
 
