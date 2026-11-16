@@ -1,17 +1,21 @@
-/* Layout: a dawn-sky hero holding a dot map of Thailand, then a ledger of problems; each problem opens to its pitched solutions. */
+/* Look: a storybook town. Light mode is day (sand walls, terracotta roofs, blue sky); dark mode is night
+   (deep purple streets, teal and magenta, warm lit windows). Every colour below is one of these tokens. */
 :root {
-  --bg: #f2f0f6;
-  --surface: #fbfafd;
-  --ink: #1b1f4b;
-  --muted: #5e6187;
-  --line: #d6d3e4;
-  --accent: #e08a00;
-  --accent-ink: #8f5400;
-  --primary: #2b2f8f;
+  --bg: #f7ead3;          /* sand wall */
+  --surface: #fff8ea;     /* cream plaster: cards, inputs */
+  --ink: #2a1f47;         /* deep plum text */
+  --muted: #6a5566;
+  --line: #e3cda9;        /* soft dividers */
+  --edge: #a88a5e;        /* borders that must be seen: inputs, buttons */
+  --accent: #e4583f;      /* terracotta: bars, underlines, highlights */
+  --accent-ink: #a53320;  /* terracotta dark enough for text */
+  --primary: #2c5aa8;     /* blue house: main buttons */
   --on-primary: #ffffff;
-  --dot: #c7c4da;
-  --sky-top: #e3e0f2;
-  --sky-low: #fbe8c6;
+  --second: #1f7f8c;      /* teal shutters */
+  --glow: #ffc94a;        /* lit window */
+  --dot: #dcc6a2;
+  --sky-top: #bfe3f4;
+  --sky-low: #f7ead3;
   --line-green: #06c755;
   --bad: #b3261e;
   --display: var(--font-display), "Leelawadee UI", "Thonburi", system-ui, sans-serif;
@@ -19,9 +23,23 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #10122b; --surface: #181b3c; --ink: #eceaf7; --muted: #a3a5c9; --line: #2d3160;
-    --accent: #ffb52e; --accent-ink: #ffc65c; --primary: #ffb52e; --on-primary: #1b1400;
-    --dot: #34386b; --sky-top: #0b0d24; --sky-low: #2b2350; --bad: #ff8a80; color-scheme: dark;
+    --bg: #1a1040;          /* night street */
+    --surface: #281a5c;
+    --ink: #f3ecff;
+    --muted: #bbaae6;
+    --line: #45318c;
+    --edge: #7c66cc;
+    --accent: #ffd24a;      /* lit window yellow */
+    --accent-ink: #63e2e6;  /* teal */
+    --primary: #ff74cf;     /* magenta */
+    --on-primary: #1a1040;
+    --second: #63e2e6;
+    --glow: #ffd24a;
+    --dot: #3b2a7c;
+    --sky-top: #24135f;
+    --sky-low: #5a2787;
+    --bad: #ff9aa8;
+    color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
@@ -47,7 +65,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tabs a { padding: 6px 10px; color: var(--muted); text-decoration: none; font-weight: 500; border-bottom: 2px solid transparent; }
 .tabs a:hover { color: var(--ink); }
 .tabs a.on { color: var(--ink); border-bottom-color: var(--accent); }
-.btn { display: inline-block; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: 500; white-space: nowrap; text-decoration: none; }
+.btn { display: inline-block; border: 1px solid var(--edge); background: var(--surface); color: var(--ink); padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: 500; white-space: nowrap; text-decoration: none; }
 .btn:hover { border-color: var(--ink); }
 .btn.primary { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 .btn.primary:hover { filter: brightness(1.1); }
@@ -86,7 +104,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-block: 24px 12px; }
 .toolbar h2 { font-size: 1.3rem; margin-right: auto; }
 .toolbar form { display: flex; flex-wrap: wrap; gap: 10px; }
-select, input[type="text"], textarea { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; max-width: 100%; }
+select, input[type="text"], textarea { background: var(--surface); border: 1px solid var(--edge); border-radius: 4px; padding: 8px 10px; max-width: 100%; }
 .notice { border-left: 3px solid var(--accent); background: var(--surface); padding: 10px 14px; margin-block: 8px; font-size: 0.925rem; }
 .rows { border-top: 1px solid var(--line); }
 .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 24px; padding-block: 18px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
