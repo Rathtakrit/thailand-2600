@@ -27,6 +27,7 @@ visualized pitch appears in one gallery.
 | File storage | A folder on the computer now, Cloudflare R2 later | Free, small to build, and R2 is where Cloudflare hosting keeps files |
 | Deadline | None; step by step | |
 | Privacy | One plain sentence on the sign-in page now; full policy and consent, checked by a lawyer, before opening to the public | PDPA covers the names and pictures we store |
+| Privacy wording | The "What we keep" notice on the sign-in page, Thai and English, approved by the owner on 2026-11-16 | Says what is stored, that posts are public, that solutions go to an AI service, and how to ask for removal |
 | Example problems | Keep, labelled "Example" | The site should not look empty |
 | How steps are checked | Local preview at phone and desktop size | |
 
