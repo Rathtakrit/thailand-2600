@@ -1,8 +1,8 @@
-import { and, count, eq, gt } from "drizzle-orm";
+import { and, count, eq, gt, inArray, isNull, lt, or } from "drizzle-orm";
 import { getDb, schema } from "./db";
 import { getStorage } from "./storage";
 
-const { files } = schema;
+const { files, solutions } = schema;
 
 export const LIMITS = {
   image: 5 * 1024 * 1024,
@@ -46,4 +46,27 @@ export async function readUpload(id: string): Promise<{ bytes: Uint8Array; conte
   if (!row) return null;
   const bytes = await getStorage().get(id);
   return bytes ? { bytes, contentType: row.contentType } : null;
+}
+
+/** Deletes uploaded files for good: the database rows and the bytes in storage. */
+export async function deleteUploads(ids: (string | null | undefined)[]) {
+  const real = ids.filter((id): id is string => !!id);
+  if (real.length === 0) return;
+  await (await getDb()).delete(files).where(inArray(files.id, real));
+  await Promise.all(real.map((id) => getStorage().remove(id)));
+}
+
+/**
+ * Deletes uploads that no solution uses: a picture someone chose and then swapped or never posted.
+ * Six hours leaves plenty of time for a pitch that is still being written.
+ */
+export async function deleteUnusedUploads() {
+  const db = await getDb();
+  const cutoff = new Date(Date.now() - 6 * 60 * 60 * 1000);
+  const unused = await db
+    .select({ id: files.id })
+    .from(files)
+    .leftJoin(solutions, or(eq(solutions.imageId, files.id), eq(solutions.modelId, files.id)))
+    .where(and(isNull(solutions.id), lt(files.createdAt, cutoff)));
+  await deleteUploads(unused.map((f) => f.id));
 }

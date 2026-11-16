@@ -2,7 +2,7 @@
 
 A public platform where people in Thailand name a problem, pitch the solution they believe would solve it by B.E. 2600, and have it judged in the open.
 
-Built so far: sign-in, problems, solutions, likes, comments, the region map, Thai/English, the AI judge with human score adjustment, and on-demand translation.
+Built so far: sign-in, problems, solutions, likes, comments, Thai/English, the AI judge with human score adjustment, on-demand translation, pictures, drawings and 3D models on pitches, the Visualized solutions gallery, reporting with a moderator page, a privacy notice, and the 3D map of 77 provinces.
 
 **Working with Claude Code:** the team rules are in `AGENTS.md`, and the decisions made so far are in `docs/briefs/`.
 
@@ -51,7 +51,10 @@ After changing `lib/db/schema.ts`, run `npm run db:generate` to create a new mig
 - `lib/db/` schema, connection, example data
 - `lib/content.ts` topics, regions, the map and all UI text in both languages
 - `lib/queries.ts` read queries
+- `lib/storage.ts`, `lib/files.ts` uploaded pictures and 3D models (saved under `.data/uploads` locally)
+- `lib/provinces.ts`, `components/Map3D.tsx` the province map
+- `lib/moderation.ts`, `app/moderate/` reports and removal; moderators are the account ids in `MODERATOR_IDS`
 
 ## Not built yet
 
-Drawings and the visualized-solutions tab, inbox and email notifications, awards and badges, the moderation queue, privacy policy and consent. The working reference for these is the prototype, saved here as `thailand-2600.html` (a Claude artifact page).
+Inbox and email notifications, awards and badges, a delete-account button, the full privacy policy and consent step, hosting. The AI judge and translation have not yet been run with a real key. The working reference for the inbox, awards and badges is the prototype, saved here as `thailand-2600.html` (a Claude artifact page); the look of the site has since moved on from it (see `docs/briefs/`).

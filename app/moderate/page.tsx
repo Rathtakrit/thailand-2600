@@ -37,7 +37,7 @@ export default async function Moderate() {
         <article className="sol" key={s.id} style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
           <div>
             <h2 style={{ fontSize: "1.15rem" }}><Link href={`/p/${s.problemId}#s-${s.id}`}>{s.title}</Link></h2>
-            <p className="muted small">{s.authorName ?? t.someone} · <span className="num">{s.reports}</span> {t.modReports}</p>
+            <p className="muted small">{s.authorName ?? t.someone} · <span className="num">{s.reports}</span> {s.reports === 1 ? t.modReport : t.modReports}</p>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {s.imageId ? <img className="vis" src={`/files/${s.imageId}`} alt={`${t.picAlt} ${s.title}`} /> : null}

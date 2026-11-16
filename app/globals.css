@@ -189,6 +189,7 @@ select, input[type="text"], textarea { background: var(--surface); border: 1px s
 .shot:hover h2 { text-decoration: underline; text-underline-offset: 4px; }
 .pill { display: inline-block; border: 1px solid var(--accent); color: var(--accent-ink); border-radius: 10px; padding: 0 8px; font-size: 0.74rem; font-weight: 600; }
 article.sol { scroll-margin-top: 16px; }
+.sol h2 a { color: var(--accent-ink); }
 
 /* problem page */
 .page { padding-block: 24px 64px; }
@@ -226,7 +227,8 @@ article.sol { scroll-margin-top: 16px; }
 .padcanvas { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #ffffff; border: 1px solid var(--line); border-radius: 4px; touch-action: none; cursor: crosshair; }
 .model { margin: 0; display: flex; flex-direction: column; gap: 4px; max-width: 560px; }
 /* height: auto beats the viewer's built-in 150px so the 4:3 shape applies. */
-.modelbox { display: flex; align-items: center; justify-content: center; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #ffffff; border: 1px solid var(--line); border-radius: 4px; }
+/* The box is white in both modes, so its text must be dark in both. */
+.modelbox { color: #5e6187; display: flex; align-items: center; justify-content: center; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #ffffff; border: 1px solid var(--line); border-radius: 4px; }
 .verdict { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 65ch; }
 .verdict dt { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .verdict dd { margin: 0; overflow-wrap: anywhere; }

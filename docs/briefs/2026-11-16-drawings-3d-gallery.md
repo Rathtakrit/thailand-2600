@@ -20,7 +20,7 @@ visualized pitch appears in one gallery.
 |---|---|---|
 | Predictions | Not part of the site | The owner's idea is problems and pitched solutions only |
 | Build next | Drawings, pictures, 3D models, gallery tab | Most helps people imagine the future |
-| Design | Follow the prototype `thailand-2600.html` | No Figma file; it is the agreed starting design |
+| Design | Replaced on 2026-11-16 by `2026-11-16-storybook-style-3d-map.md` (new colours, font, Thai street, hexagon map). Before that: follow the prototype `thailand-2600.html` | The owner supplied colour charts and reference pictures |
 | 3D | A model visitors can rotate (`.glb` file), up to 10 MB | Owner's choice; 10 MB loads in seconds on a phone |
 | Phones | Drawing must work well with a finger | Most visitors in Thailand use a phone |
 | Picture review | Visible right away, with a report button | Launch is with people we know |

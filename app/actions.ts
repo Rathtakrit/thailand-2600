@@ -9,6 +9,7 @@ import { auth, signIn, signOut } from "@/auth";
 import { aiEnabled, translateFields } from "@/lib/ai";
 import { CATS, REGIONS } from "@/lib/content";
 import { getDb, schema } from "@/lib/db";
+import { deleteUnusedUploads, deleteUploads } from "@/lib/files";
 import { runJudge, takeAiTurn } from "@/lib/judge";
 import { isModerator, removeVisual } from "@/lib/moderation";
 import { clampScore, CRIT_KEYS, type Scores } from "@/lib/scoring";
@@ -73,6 +74,8 @@ export async function createSolution(form: FormData) {
   const judgeNow = aiEnabled() && (await takeAiTurn(userId, "judge"));
   await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, modelId, aiStatus: judgeNow ? "pending" : "none" });
   if (judgeNow) after(() => runJudge(id));
+  // Tidy up pictures and models that were uploaded but never posted.
+  after(() => deleteUnusedUploads().catch((err) => console.error("Upload clean-up failed", err)));
   refresh();
 }
 
@@ -172,16 +175,29 @@ export async function toggleVote(form: FormData) {
   refresh();
 }
 
-/** Authors can remove their own posts. Moderator removal arrives with the review queue. */
+/**
+ * Authors can remove their own posts. A removed pitch takes its picture and 3D model with it,
+ * so nothing a person deleted can still be opened by its address.
+ */
 export async function removeOwn(form: FormData) {
   const userId = await requireUser();
   const kind = String(form.get("kind")), id = text(form, "id", 40);
   const db = await getDb();
   if (kind === "problem") {
-    await db.delete(problems).where(and(eq(problems.id, id), eq(problems.authorId, userId)));
+    const [mine] = await db.select({ id: problems.id }).from(problems).where(and(eq(problems.id, id), eq(problems.authorId, userId)));
+    if (!mine) return;
+    // Every pitch under the problem goes with it, so collect their files first.
+    const attached = await db.select({ imageId: solutions.imageId, modelId: solutions.modelId }).from(solutions).where(eq(solutions.problemId, id));
+    await db.delete(problems).where(eq(problems.id, id));
+    await deleteUploads(attached.flatMap((s) => [s.imageId, s.modelId]));
     redirect("/");
   }
-  if (kind === "solution") await db.delete(solutions).where(and(eq(solutions.id, id), eq(solutions.authorId, userId)));
+  if (kind === "solution") {
+    const [mine] = await db.select({ imageId: solutions.imageId, modelId: solutions.modelId }).from(solutions).where(and(eq(solutions.id, id), eq(solutions.authorId, userId)));
+    if (!mine) return;
+    await db.delete(solutions).where(eq(solutions.id, id));
+    await deleteUploads([mine.imageId, mine.modelId]);
+  }
   if (kind === "comment") await db.delete(comments).where(and(eq(comments.id, id), eq(comments.authorId, userId)));
   refresh();
 }
