@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { connection } from "next/server";
 import { auth } from "@/auth";
 import { dict, type Lang } from "./content";
+import { isModerator } from "./moderation";
 
 export async function getLang(): Promise<Lang> {
   return (await cookies()).get("lang")?.value === "th" ? "th" : "en";
@@ -13,7 +14,7 @@ export async function getContext() {
   await connection();
   const lang = await getLang();
   const session = await auth();
-  return { lang, t: dict(lang), userId: session?.user?.id ?? null, userName: session?.user?.name ?? null, userImage: session?.user?.image ?? null };
+  return { lang, t: dict(lang), userId: session?.user?.id ?? null, moderator: isModerator(session?.user?.id ?? null), userName: session?.user?.name ?? null, userImage: session?.user?.image ?? null };
 }
 
 export const fmtDate = (d: Date, lang: Lang) =>

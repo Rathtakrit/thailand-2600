@@ -124,3 +124,14 @@ export const files = pgTable(
   },
   (t) => [index("files_owner_created").on(t.ownerId, t.createdAt)],
 );
+
+/** One person saying a solution's picture or 3D model should not be on the site. One report per person per solution. */
+export const reports = pgTable(
+  "reports",
+  {
+    solutionId: text("solution_id").notNull().references(() => solutions.id, { onDelete: "cascade" }),
+    reporterId: text("reporter_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.solutionId, t.reporterId] })],
+);

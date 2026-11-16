@@ -10,9 +10,10 @@ import { aiEnabled, translateFields } from "@/lib/ai";
 import { CATS, REGIONS } from "@/lib/content";
 import { getDb, schema } from "@/lib/db";
 import { runJudge, takeAiTurn } from "@/lib/judge";
+import { isModerator, removeVisual } from "@/lib/moderation";
 import { clampScore, CRIT_KEYS, type Scores } from "@/lib/scoring";
 
-const { problems, solutions, comments, likes, votes, reviews, translations, files } = schema;
+const { problems, solutions, comments, likes, votes, reviews, translations, files, reports } = schema;
 
 async function requireUser(): Promise<string> {
   const session = await auth();
@@ -182,5 +183,26 @@ export async function removeOwn(form: FormData) {
   }
   if (kind === "solution") await db.delete(solutions).where(and(eq(solutions.id, id), eq(solutions.authorId, userId)));
   if (kind === "comment") await db.delete(comments).where(and(eq(comments.id, id), eq(comments.authorId, userId)));
+  refresh();
+}
+
+/** Any signed-in person can report a solution's picture or 3D model, once. */
+export async function reportVisual(form: FormData) {
+  const userId = await requireUser();
+  const solutionId = text(form, "solutionId", 40);
+  const db = await getDb();
+  const [s] = await db.select({ imageId: solutions.imageId, modelId: solutions.modelId }).from(solutions).where(eq(solutions.id, solutionId));
+  if (!s || (!s.imageId && !s.modelId)) return;
+  await db.insert(reports).values({ solutionId, reporterId: userId }).onConflictDoNothing();
+  refresh();
+}
+
+/** Moderators only: remove a reported picture or model, or keep it and clear its reports. */
+export async function moderateVisual(form: FormData) {
+  const userId = await requireUser();
+  if (!isModerator(userId)) return;
+  const solutionId = text(form, "solutionId", 40), what = String(form.get("what"));
+  if (what === "image" || what === "model") await removeVisual(solutionId, what);
+  else if (what === "keep") await (await getDb()).delete(reports).where(eq(reports.solutionId, solutionId));
   refresh();
 }

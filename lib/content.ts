@@ -86,6 +86,9 @@ const en = {
   tabVisuals: "Visualized solutions", visHead: "Visualized solutions", visLede: "Every solution that comes with a drawing, a picture or a 3D model. Open one to read the pitch and its verdict.", visEmpty: "No visualized solutions yet. Pitch a solution and draw it.",
   forProblem: "For", likesWord: "likes", visModelOnly: "3D model. Open to turn it around.", visHas3d: "3D",
   mapHint: "Drag to turn the map. Tap a province to see its name.", mapShow: "Show problems in", mapAria: "A 3D map of Thailand's 77 provinces. Use the list of regions beside it to filter.",
+  report: "Report the picture or model", reported: "Reported. A moderator will look at it.",
+  modTab: "Moderate", modHead: "Reported pictures and models", modLede: "Pictures and 3D models that people have reported. Remove what should not be on the site, or keep it and clear the reports.", modEmpty: "Nothing has been reported.",
+  modRemovePic: "Remove picture", modRemoveModel: "Remove 3D model", modKeep: "Keep it", modReports: "reports", modNot: "This page is for moderators.", modYourId: "Your account id is", modHow: "To moderate, add it to MODERATOR_IDS in the settings file (.env.local) and restart the site.",
   notFound: "This problem is no longer here.",
 };
 
@@ -128,6 +131,9 @@ const th: typeof en = {
   tabVisuals: "ทางแก้แบบเห็นภาพ", visHead: "ทางแก้แบบเห็นภาพ", visLede: "ทางแก้ทุกข้อที่มีภาพวาด ภาพประกอบ หรือโมเดล 3 มิติ เปิดดูเพื่ออ่านข้อเสนอและคำตัดสิน", visEmpty: "ยังไม่มีทางแก้แบบเห็นภาพ ลองเสนอทางแก้แล้ววาดดู",
   forProblem: "สำหรับปัญหา", likesWord: "ถูกใจ", visModelOnly: "โมเดล 3 มิติ เปิดเพื่อหมุนดู", visHas3d: "3 มิติ",
   mapHint: "ลากเพื่อหมุนแผนที่ แตะจังหวัดเพื่อดูชื่อ", mapShow: "ดูปัญหาใน", mapAria: "แผนที่ 3 มิติของ 77 จังหวัดในประเทศไทย ใช้รายชื่อภูมิภาคด้านข้างเพื่อกรอง",
+  report: "รายงานภาพหรือโมเดล", reported: "รายงานแล้ว ผู้ดูแลจะตรวจสอบ",
+  modTab: "ดูแล", modHead: "ภาพและโมเดลที่ถูกรายงาน", modLede: "ภาพและโมเดล 3 มิติที่มีผู้รายงาน ลบสิ่งที่ไม่ควรอยู่บนเว็บไซต์ หรือเก็บไว้แล้วล้างรายงาน", modEmpty: "ยังไม่มีการรายงาน",
+  modRemovePic: "ลบภาพ", modRemoveModel: "ลบโมเดล 3 มิติ", modKeep: "เก็บไว้", modReports: "รายงาน", modNot: "หน้านี้สำหรับผู้ดูแล", modYourId: "รหัสบัญชีของคุณคือ", modHow: "หากต้องการเป็นผู้ดูแล ให้เพิ่มรหัสนี้ใน MODERATOR_IDS ในไฟล์ตั้งค่า (.env.local) แล้วเริ่มเว็บไซต์ใหม่",
   notFound: "ไม่พบปัญหานี้แล้ว",
 };
 

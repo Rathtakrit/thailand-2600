@@ -3,7 +3,7 @@ import type { Lang } from "./content";
 import { getDb, schema } from "./db";
 import { finalScore, type Scores } from "./scoring";
 
-const { problems, solutions, comments, likes, votes, users, reviews, translations } = schema;
+const { problems, solutions, comments, likes, votes, users, reviews, translations, reports } = schema;
 
 const seenCount = sql<number>`(select count(*)::int from votes v where v.problem_id = "problems"."id")`;
 const solCount = sql<number>`(select count(*)::int from solutions s where s.problem_id = "problems"."id")`;
@@ -51,7 +51,7 @@ export async function getProblem(id: string, userId: string | null, lang: Lang) 
   const sols = solRows.map((s) => ({ ...s, status: s.aiStatus === "pending" && now - (s.aiAt ?? s.createdAt).getTime() > 3 * 60 * 1000 ? "failed" : s.aiStatus }));
 
   const ids = sols.map((s) => s.id);
-  const [cmts, myLikes, myVote, revs] = await Promise.all([
+  const [cmts, myLikes, myVote, revs, myReports] = await Promise.all([
     ids.length
       ? db
           .select({ id: comments.id, solutionId: comments.solutionId, body: comments.body, authorId: comments.authorId, createdAt: comments.createdAt, authorName: users.name })
@@ -63,6 +63,7 @@ export async function getProblem(id: string, userId: string | null, lang: Lang) 
     userId && ids.length ? db.select({ id: likes.solutionId }).from(likes).where(and(eq(likes.userId, userId), inArray(likes.solutionId, ids))) : [],
     userId ? db.select({ id: votes.problemId }).from(votes).where(and(eq(votes.userId, userId), eq(votes.problemId, id))) : [],
     ids.length ? db.select({ solutionId: reviews.solutionId, userId: reviews.userId, scores: reviews.scores }).from(reviews).where(inArray(reviews.solutionId, ids)) : [],
+    userId && ids.length ? db.select({ id: reports.solutionId }).from(reports).where(and(eq(reports.reporterId, userId), inArray(reports.solutionId, ids))) : [],
   ]);
 
   const reviewsBy = new Map<string, Scores[]>();
@@ -77,7 +78,7 @@ export async function getProblem(id: string, userId: string | null, lang: Lang) 
   const trRows = await db.select().from(translations).where(and(eq(translations.lang, lang), inArray(translations.refId, refIds)));
   const tr = new Map(trRows.map((r) => [`${r.kind}:${r.refId}`, r.data]));
 
-  return { problem, sols, comments: cmts, liked: new Set(myLikes.map((r) => r.id)), seenByMe: myVote.length > 0, reviewsBy, myReviews, tr };
+  return { problem, sols, comments: cmts, liked: new Set(myLikes.map((r) => r.id)), seenByMe: myVote.length > 0, reviewsBy, myReviews, tr, reported: new Set(myReports.map((r) => r.id)) };
 }
 
 /** Every solution that has a picture, drawing or 3D model, newest first, with its score and likes. */
@@ -95,4 +96,18 @@ export async function listVisuals() {
   const ids = rows.map((r) => r.id);
   const revs = ids.length ? await db.select({ solutionId: reviews.solutionId, scores: reviews.scores }).from(reviews).where(inArray(reviews.solutionId, ids)) : [];
   return rows.map((r) => ({ ...r, final: finalScore(r.ai?.scores, revs.filter((v) => v.solutionId === r.id).map((v) => v.scores)) }));
+}
+
+/** Solutions whose picture or 3D model has been reported, most-reported first. For moderators. */
+export async function listReported() {
+  const db = await getDb();
+  const n = sql<number>`count(*)::int`;
+  return db
+    .select({ id: solutions.id, title: solutions.title, problemId: solutions.problemId, imageId: solutions.imageId, modelId: solutions.modelId, authorName: users.name, reports: n })
+    .from(reports)
+    .innerJoin(solutions, eq(solutions.id, reports.solutionId))
+    .leftJoin(users, eq(users.id, solutions.authorId))
+    .groupBy(solutions.id, users.name)
+    .orderBy(desc(n))
+    .limit(100);
 }

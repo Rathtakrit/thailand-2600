@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { addComment, askJudge, removeOwn, saveReview, toggleLike, toggleVote, translate } from "@/app/actions";
+import { addComment, askJudge, removeOwn, reportVisual, saveReview, toggleLike, toggleVote, translate } from "@/app/actions";
 import AutoRefresh from "@/components/AutoRefresh";
 import ModelView from "@/components/ModelView";
 import PitchForm from "@/components/PitchForm";
@@ -52,7 +52,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
       </div>
     );
   }
-  const { problem: p, sols, comments, liked, seenByMe, reviewsBy, myReviews, tr } = data;
+  const { problem: p, sols, comments, liked, seenByMe, reviewsBy, myReviews, tr, reported } = data;
   const showOrig = sp.orig === "1";
   const ai = aiEnabled();
   const canAsk = ai && !!userId;
@@ -160,6 +160,16 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
                   <button className={`btn${isLiked ? " on" : ""}`} type="submit" aria-pressed={isLiked}>{isLiked ? t.liked : t.like} · <span className="num">{s.likes}</span></button>
                 </form>
                 {isAuthor ? <Remove kind="solution" rid={s.id} label={t.remove} /> : null}
+                {userId && !isAuthor && (s.imageId || s.modelId) ? (
+                  reported.has(s.id) ? (
+                    <span className="muted small">{t.reported}</span>
+                  ) : (
+                    <form action={reportVisual} className="inline">
+                      <input type="hidden" name="solutionId" value={s.id} />
+                      <button className="link small" type="submit">{t.report}</button>
+                    </form>
+                  )
+                ) : null}
               </div>
 
               {userId ? (
