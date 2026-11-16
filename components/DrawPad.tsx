@@ -3,12 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dict } from "@/lib/content";
 
-export type DrawLabels = Pick<Dict, "drawHint" | "drawUndo" | "drawClear" | "drawDone" | "drawCancel" | "drawColour" | "thin" | "mid" | "thick">;
+export type DrawLabels = Pick<Dict, "drawHint" | "drawUndo" | "drawClear" | "drawDone" | "drawCancel" | "drawColour" | "drawShade" | "drawSize">;
 
 // The drawing's own pixel size. On screen the canvas scales to the width available.
 const W = 1200, H = 900;
-const COLOURS = ["#1b1f4b", "#e08a00", "#c0392b", "#2e8b57", "#2a7fd6", "#ffffff"];
-const SIZES: [number, keyof DrawLabels][] = [[5, "thin"], [10, "mid"], [22, "thick"]];
+// Thickness is in drawing pixels (the drawing is 1200 wide), so 8 is a pen and 60 is a broad marker.
+const MIN_SIZE = 2, MAX_SIZE = 60;
+const colourOf = (hue: number, light: number) => `hsl(${hue} 85% ${light}%)`;
 
 type Stroke = { colour: string; size: number; points: [number, number][] };
 
@@ -35,8 +36,11 @@ export default function DrawPad({ backgroundUrl, t, onDone, onCancel }: { backgr
   const strokes = useRef<Stroke[]>([]);
   const current = useRef<Stroke | null>(null);
   const background = useRef<HTMLImageElement | null>(null);
-  const [colour, setColour] = useState(COLOURS[0]);
-  const [size, setSize] = useState(SIZES[1][0]);
+  // Colour is two scales: which colour (hue) and how dark or light. Light at 0 is black, at 100 is white.
+  const [hue, setHue] = useState(236);
+  const [light, setLight] = useState(20);
+  const [size, setSize] = useState(10);
+  const colour = colourOf(hue, light);
   const [count, setCount] = useState(0);
   const [hasBackground, setHasBackground] = useState(false);
 
@@ -113,20 +117,24 @@ export default function DrawPad({ backgroundUrl, t, onDone, onCancel }: { backgr
   return (
     <div className="pad">
       <span className="muted small">{t.drawHint}</span>
-      <div className="padbar" role="group" aria-label={t.drawColour}>
-        {COLOURS.map((c, i) => (
-          <button key={c} type="button" className={`sw${colour === c ? " on" : ""}`} style={{ background: c }} aria-label={`${t.drawColour} ${i + 1}`} aria-pressed={colour === c} onClick={() => setColour(c)} />
-        ))}
+      <div className="scales">
+        <label htmlFor="padHue">{t.drawColour}</label>
+        <input id="padHue" className="scale hue" type="range" min={0} max={360} value={hue} onChange={(e) => setHue(Number(e.target.value))} />
+        <label htmlFor="padLight">{t.drawShade}</label>
+        <input id="padLight" className="scale" type="range" min={0} max={100} value={light} onChange={(e) => setLight(Number(e.target.value))} style={{ background: `linear-gradient(90deg, #000000, ${colourOf(hue, 50)}, #ffffff)` }} />
+        <label htmlFor="padSize">{t.drawSize}</label>
+        <input id="padSize" className="scale plain" type="range" min={MIN_SIZE} max={MAX_SIZE} value={size} onChange={(e) => setSize(Number(e.target.value))} />
       </div>
       <div className="padbar">
-        {SIZES.map(([n, key]) => (
-          <button key={n} type="button" className={`btn${size === n ? " on" : ""}`} aria-pressed={size === n} onClick={() => setSize(n)}>{t[key]}</button>
-        ))}
+        {/* Shows the line you are about to draw: its colour and, to scale with the pad, its thickness. */}
+        <span className="nib" aria-hidden="true"><i style={{ background: colour, width: `${(size / W) * 100}%` }} /></span>
         <span className="grow" />
         <button type="button" className="btn" disabled={count === 0} onClick={undo}>{t.drawUndo}</button>
         <button type="button" className="btn" disabled={count === 0} onClick={clear}>{t.drawClear}</button>
       </div>
+      <div className="padwrap">
       <canvas ref={canvas} className="padcanvas" width={W} height={H} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
+      </div>
       <div className="acts" style={{ marginTop: 0 }}>
         <button type="button" className="btn primary" disabled={count === 0 && !hasBackground} onClick={done}>{t.drawDone}</button>
         <button type="button" className="link" onClick={onCancel}>{t.drawCancel}</button>

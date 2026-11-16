@@ -80,7 +80,7 @@ const en = {
   trTo: "Translate to English", showOrig: "Show original", showTr: "Show translation", limitHit: "You have reached today's limit for this. Try again tomorrow.",
   picLabel: "Show it (optional)", picHint: "Draw your solution, or add a photo, sketch or diagram (PNG, JPEG or WebP). You can draw on top of a picture.", picChoose: "Choose a picture", picChange: "Choose another", picRemove: "Remove picture",
   picUploading: "Uploading…", picErrType: "That file is not a picture we can read. Use a PNG, JPEG or WebP.", picErrBig: "That picture is too big even after shrinking. Try another one.", picErrLimit: "You have uploaded the most files allowed for today. Try again tomorrow.", picErrFail: "The picture did not upload. Check your connection and try again.", picAlt: "Picture for the solution:",
-  drawBtn: "Draw it", drawOn: "Draw on this picture", drawHint: "Draw with your finger or mouse. Press \"Use this drawing\" when you are done.", drawUndo: "Undo", drawClear: "Clear", drawDone: "Use this drawing", drawCancel: "Cancel", drawColour: "Colour", thin: "Thin", mid: "Medium", thick: "Thick",
+  drawBtn: "Draw it", drawOn: "Draw on this picture", drawHint: "Draw with your finger or mouse. Press \"Use this drawing\" when you are done.", drawUndo: "Undo", drawClear: "Clear", drawDone: "Use this drawing", drawCancel: "Cancel", drawColour: "Colour", drawShade: "Dark to light", drawSize: "Line thickness",
   notFound: "This problem is no longer here.",
 };
 
@@ -117,7 +117,7 @@ const th: typeof en = {
   trTo: "แปลเป็นภาษาไทย", showOrig: "ดูต้นฉบับ", showTr: "ดูคำแปล", limitHit: "วันนี้คุณใช้ครบจำนวนที่กำหนดแล้ว ลองใหม่พรุ่งนี้",
   picLabel: "ทำให้เห็นภาพ (ไม่บังคับ)", picHint: "วาดทางแก้ของคุณ หรือใส่ภาพถ่าย ภาพร่าง หรือแผนผัง (PNG, JPEG หรือ WebP) แล้ววาดทับภาพได้", picChoose: "เลือกภาพ", picChange: "เลือกภาพอื่น", picRemove: "ลบภาพ",
   picUploading: "กำลังอัปโหลด…", picErrType: "อ่านไฟล์นี้เป็นภาพไม่ได้ ใช้ไฟล์ PNG, JPEG หรือ WebP", picErrBig: "ภาพนี้ใหญ่เกินไปแม้ย่อแล้ว ลองใช้ภาพอื่น", picErrLimit: "วันนี้คุณอัปโหลดครบจำนวนที่กำหนดแล้ว ลองใหม่พรุ่งนี้", picErrFail: "อัปโหลดภาพไม่สำเร็จ ตรวจการเชื่อมต่อแล้วลองอีกครั้ง", picAlt: "ภาพประกอบทางแก้:",
-  drawBtn: "วาดเอง", drawOn: "วาดทับภาพนี้", drawHint: "วาดด้วยนิ้วหรือเมาส์ เสร็จแล้วกด \"ใช้ภาพวาดนี้\"", drawUndo: "ย้อนกลับ", drawClear: "ล้าง", drawDone: "ใช้ภาพวาดนี้", drawCancel: "ยกเลิก", drawColour: "สี", thin: "บาง", mid: "กลาง", thick: "หนา",
+  drawBtn: "วาดเอง", drawOn: "วาดทับภาพนี้", drawHint: "วาดด้วยนิ้วหรือเมาส์ เสร็จแล้วกด \"ใช้ภาพวาดนี้\"", drawUndo: "ย้อนกลับ", drawClear: "ล้าง", drawDone: "ใช้ภาพวาดนี้", drawCancel: "ยกเลิก", drawColour: "สี", drawShade: "เข้มถึงอ่อน", drawSize: "ความหนาของเส้น",
   notFound: "ไม่พบปัญหานี้แล้ว",
 };
 
