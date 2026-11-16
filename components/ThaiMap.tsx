@@ -39,7 +39,7 @@ export default function ThaiMap({ counts, selected, lang, hrefFor }: { counts: R
       </Map3D>
       <div className="chips">
         {REGIONS.map(([key]) => (
-          <Link key={key} className={`chip${selected === key ? " sel" : ""}`} href={to(key)} aria-current={selected === key ? "true" : undefined}>
+          <Link key={key} className={`chip${selected === key ? " sel" : ""}`} href={to(key)} scroll={false} aria-current={selected === key ? "true" : undefined}>
             <span>{label(REGIONS, key, lang)}</span>
             <span className="num">{counts[key] ?? 0}</span>
           </Link>

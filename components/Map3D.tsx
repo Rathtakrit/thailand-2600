@@ -21,8 +21,9 @@ type Props = {
 type Live = { apply: (counts: Record<string, number>, selected: string | undefined, picked: number | null) => void; dispose: () => void };
 
 /**
- * Thailand as 77 rounded blocks you can turn by dragging. Blocks are coloured by region and stand taller
- * where problems have been named. Tapping a block shows the province's name and a link to its region.
+ * Thailand as 77 six-sided tiles you can turn by dragging. Tiles are coloured by region and stand taller
+ * where problems have been named; the region the list is filtered to rises well above the rest.
+ * Tapping a tile shows the province's name and a link to its region.
  * The 3D code (three) is only downloaded here, in the browser, on the page that shows the map.
  */
 export default function Map3D({ counts, selected, thai, regionNames, hrefs, labels, children }: Props) {
@@ -47,7 +48,6 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
     (async () => {
       const THREE = await import("three");
       const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
-      const { RoundedBoxGeometry } = await import("three/examples/jsm/geometries/RoundedBoxGeometry.js");
       if (cancelled) return;
 
       let renderer: InstanceType<typeof THREE.WebGLRenderer>;
@@ -67,15 +67,19 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
       scene.add(sun);
 
       const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200);
-      const reach = Math.hypot(GRID.cols, GRID.rows) / 2 + 0.6; // radius of the whole map
+      // Honeycomb: six-sided tiles, every second row shifted half a tile so they nest.
+      const R = 0.58, stepX = Math.sqrt(3) * R, stepZ = 1.5 * R;
+      const spanX = (GRID.cols - 0.5) * stepX, spanZ = (GRID.rows - 1) * stepZ;
+      const reach = Math.hypot(spanX, spanZ) / 2 + 0.8; // radius of the whole map
 
       const css = getComputedStyle(host);
       const colourOf = (region: string) => new THREE.Color(css.getPropertyValue(`--rg-${region}`).trim() || "#cccccc");
 
-      const geometry = new RoundedBoxGeometry(0.9, 1, 0.9, 3, 0.16);
+      const geometry = new THREE.CylinderGeometry(R * 0.94, R * 0.94, 1, 6);
       const blocks = PROVINCES.map((prov, i) => {
         const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ roughness: 0.75, metalness: 0 }));
-        mesh.position.set(prov.col - (GRID.cols - 1) / 2, 0, prov.row - (GRID.rows - 1) / 2);
+        mesh.position.set((prov.col + (prov.row % 2) * 0.5) * stepX - spanX / 2, 0, prov.row * stepZ - spanZ / 2);
+        mesh.userData.height = 0.35;
         mesh.userData.index = i;
         scene.add(mesh);
         return mesh;
@@ -85,20 +89,22 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
         blocks.forEach((mesh, i) => {
           const prov = PROVINCES[i];
           const n = c[prov.region] ?? 0;
-          const isPicked = pick === i, inSelected = sel === prov.region;
-          const height = 0.35 + Math.min(n, 4) * 0.22 + (inSelected ? 0.35 : 0) + (isPicked ? 0.5 : 0);
-          mesh.scale.set(isPicked ? 1.12 : 1, height, isPicked ? 1.12 : 1);
-          mesh.position.y = height / 2;
+          // "all" is the Nationwide filter: every province belongs to it.
+          const isPicked = pick === i, inSelected = sel === prov.region || sel === "all";
+          const filtering = !!sel;
+          // The filtered region stands up clearly; the tick below eases each tile to this height.
+          mesh.userData.height = 0.35 + Math.min(n, 4) * 0.18 + (inSelected ? 1.3 : 0) + (isPicked ? 0.6 : 0);
           const base = colourOf(prov.region);
-          // Regions with no problems yet are paler; a picked or filtered block glows.
-          if (n === 0 && !inSelected && !isPicked) base.lerp(colourOf("none"), 0.55);
+          // While a filter is on, everything outside it fades back. Otherwise regions with no problems are paler.
+          if (filtering && !inSelected && !isPicked) base.lerp(colourOf("none"), 0.75);
+          else if (!filtering && n === 0 && !isPicked) base.lerp(colourOf("none"), 0.5);
           mesh.material.color.copy(base);
-          mesh.material.emissive.copy(base).multiplyScalar(isPicked ? 0.45 : inSelected ? 0.22 : 0);
+          mesh.material.emissive.copy(base).multiplyScalar(isPicked ? 0.45 : inSelected ? 0.25 : 0);
         });
       };
 
       const controls = new OrbitControls(camera, canvas);
-      controls.target.set(0, 0.3, 0);
+      controls.target.set(0, 0.6, 0);
       controls.enablePan = false;
       controls.enableZoom = false;
       controls.enableDamping = true;
@@ -153,6 +159,11 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
         frame = requestAnimationFrame(tick);
         if (!visible) return;
         controls.update();
+        for (const mesh of blocks) {
+          const h = mesh.scale.y + (mesh.userData.height - mesh.scale.y) * 0.18;
+          mesh.scale.y = h;
+          mesh.position.y = h / 2;
+        }
         renderer.render(scene, camera);
       };
       tick();
@@ -197,7 +208,7 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
       <p className="mapnote small" aria-live="polite">
         {prov ? (
           <>
-            <b>{thai ? prov.th : prov.en}</b> · {regionNames[prov.region]} · <Link href={hrefs[prov.region]}>{labels.show} {regionNames[prov.region]}</Link>
+            <b>{thai ? prov.th : prov.en}</b> · {regionNames[prov.region]} · <Link href={hrefs[prov.region]} scroll={false}>{labels.show} {regionNames[prov.region]}</Link>
           </>
         ) : (
           <span className="muted">{labels.hint}</span>

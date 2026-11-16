@@ -13,7 +13,7 @@ use color and graphic like image I show."
 ## Decisions (2026-11-16)
 | Topic | Decision | Why |
 |---|---|---|
-| 3D map | 77 provinces as small rounded blocks arranged in Thailand's shape; drag to rotate | Light enough for phones, needs no downloaded map data, easy to change |
+| 3D map | 77 provinces as six-sided (hexagon) tiles in a honeycomb arranged in Thailand's shape; drag to rotate. Hexagons chosen by the owner on 2026-11-16 over octagons and a real-outline map | Light enough for phones, needs no downloaded map data, easy to change |
 | Province symbols | Dropped (owner, 2026-11-16). Blocks are plain; a province's name shows when it is tapped | 77 symbols was the largest job and the easiest to get wrong |
 | Colours | Changed by the owner on 2026-11-16: light mode uses the owner's warm colour chart (orange #F97940, peach, sand, pale blue); dark mode uses the owner's night-sky chart (navy #0B275D, indigo, star yellow #FFC200, pink #E992C5). Text colours are darker or lighter versions so they stay readable | Owner supplied both charts; follows each visitor's phone setting |
 | Fonts | Poppins (round, easy to read) with Prompt for Thai letters, which Poppins lacks | Owner asked for a round font |
