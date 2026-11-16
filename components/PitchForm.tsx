@@ -3,8 +3,9 @@
 import { useRef, useState } from "react";
 import { createSolution } from "@/app/actions";
 import type { Dict } from "@/lib/content";
+import DrawPad, { type DrawLabels } from "./DrawPad";
 
-type Labels = Pick<Dict, "dsHint" | "dsName" | "dsBody" | "dsSubmit" | "picLabel" | "picHint" | "picChoose" | "picChange" | "picRemove" | "picUploading" | "picErrType" | "picErrBig" | "picErrLimit" | "picErrFail">;
+type Labels = Pick<Dict, "dsHint" | "dsName" | "dsBody" | "dsSubmit" | "picLabel" | "picHint" | "picChoose" | "picChange" | "picRemove" | "picUploading" | "picErrType" | "picErrBig" | "picErrLimit" | "picErrFail" | "drawBtn" | "drawOn"> & DrawLabels;
 
 const MAX_SIDE = 1600;
 
@@ -36,13 +37,20 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
   const [error, setError] = useState("");
   const input = useRef<HTMLInputElement>(null);
 
+  const [drawing, setDrawing] = useState(false);
+
   async function choose(file: File | undefined) {
     if (!file) return;
+    const blob = await shrink(file);
+    if (!blob) return setError(t.picErrType);
+    await upload(blob);
+  }
+
+  /** Sends a picture (chosen or drawn) to the server and makes it this pitch's picture. */
+  async function upload(blob: Blob) {
     setError("");
     setBusy(true);
     try {
-      const blob = await shrink(file);
-      if (!blob) return setError(t.picErrType);
       const body = new FormData();
       body.append("file", blob, "picture.jpg");
       const res = await fetch("/api/files", { method: "POST", body });
@@ -64,6 +72,7 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
       action={async (data) => {
         await createSolution(data);
         setPic(null);
+        setDrawing(false);
       }}
     >
       <input type="hidden" name="problemId" value={problemId} />
@@ -76,16 +85,30 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
         <label htmlFor="sPic">{t.picLabel}</label>
         <span className="muted small">{t.picHint}</span>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        {pic ? <img className="vis" src={pic.url} alt="" /> : null}
+        {pic && !drawing ? <img className="vis" src={pic.url} alt="" /> : null}
+        {drawing ? (
+          <DrawPad
+            backgroundUrl={pic?.url}
+            t={t}
+            onCancel={() => setDrawing(false)}
+            onDone={(blob) => {
+              setDrawing(false);
+              upload(blob);
+            }}
+          />
+        ) : null}
         <input ref={input} className="filepick" type="file" id="sPic" accept="image/png,image/jpeg,image/webp" onChange={(e) => choose(e.target.files?.[0])} />
-        <div className="acts" style={{ marginTop: 0 }}>
-          <button className="btn" type="button" disabled={busy} onClick={() => input.current?.click()}>{busy ? t.picUploading : pic ? t.picChange : t.picChoose}</button>
-          {pic && !busy ? <button className="link" type="button" onClick={() => setPic(null)}>{t.picRemove}</button> : null}
-        </div>
+        {drawing ? null : (
+          <div className="acts" style={{ marginTop: 0 }}>
+            <button className="btn" type="button" disabled={busy} onClick={() => input.current?.click()}>{busy ? t.picUploading : pic ? t.picChange : t.picChoose}</button>
+            <button className="btn" type="button" disabled={busy} onClick={() => setDrawing(true)}>{pic ? t.drawOn : t.drawBtn}</button>
+            {pic && !busy ? <button className="link" type="button" onClick={() => setPic(null)}>{t.picRemove}</button> : null}
+          </div>
+        )}
         {error ? <p className="err" role="alert">{error}</p> : null}
       </div>
 
-      <div><button className="btn primary" type="submit" disabled={busy}>{t.dsSubmit}</button></div>
+      <div><button className="btn primary" type="submit" disabled={busy || drawing}>{t.dsSubmit}</button></div>
     </form>
   );
 }
