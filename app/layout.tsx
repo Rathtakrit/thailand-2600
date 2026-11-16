@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Anuphan, Chakra_Petch } from "next/font/google";
+import { Poppins, Prompt } from "next/font/google";
 import { Suspense } from "react";
 import Header from "@/components/Header";
 import "./globals.css";
 
-const body = Anuphan({ variable: "--font-body", subsets: ["latin", "thai"], weight: ["400", "500", "600"] });
-const display = Chakra_Petch({ variable: "--font-display", subsets: ["latin", "thai"], weight: ["500", "600", "700"] });
+// Poppins is round and easy to read but has no Thai letters; Prompt is its Thai partner and fills them in.
+const latin = Poppins({ variable: "--font-latin", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const thai = Prompt({ variable: "--font-thai", subsets: ["thai"], weight: ["400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
   title: "Thailand 2600",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="th" className={`${body.variable} ${display.variable}`}>
+    <html lang="th" className={`${latin.variable} ${thai.variable}`}>
       <body>
         <Suspense fallback={<header className="top"><div className="wrap topin"><span className="brand">THAILAND <b>2600</b></span></div></header>}>
           <Header />

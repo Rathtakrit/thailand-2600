@@ -1,44 +1,46 @@
-/* Look: a storybook town. Light mode is day (sand walls, terracotta roofs, blue sky); dark mode is night
-   (deep purple streets, teal and magenta, warm lit windows). Every colour below is one of these tokens. */
+/* Look: soft and friendly. Light mode ("day") takes its colours from the owner's warm colour chart
+   (orange #F97940, peach #FEE8DD, sand #EABD86, pale blue #C8E4E8). Dark mode ("night") takes them from the
+   owner's night-sky chart (navy #0B275D, indigo #1E0F74, star yellow #FFC200, pink #E992C5, pale blue #BDD8EA).
+   Text colours are darker or lighter versions of chart colours so they stay readable. */
 :root {
-  --bg: #f7ead3;          /* sand wall */
-  --surface: #fff8ea;     /* cream plaster: cards, inputs */
-  --ink: #2a1f47;         /* deep plum text */
-  --muted: #6a5566;
-  --line: #e3cda9;        /* soft dividers */
-  --edge: #a88a5e;        /* borders that must be seen: inputs, buttons */
-  --accent: #e4583f;      /* terracotta: bars, underlines, highlights */
-  --accent-ink: #a53320;  /* terracotta dark enough for text */
-  --primary: #2c5aa8;     /* blue house: main buttons */
-  --on-primary: #ffffff;
-  --second: #1f7f8c;      /* teal shutters */
-  --glow: #ffc94a;        /* lit window */
-  --dot: #dcc6a2;
-  --sky-top: #bfe3f4;
-  --sky-low: #f7ead3;
-  --line-green: #06c755;
+  --bg: #fef3e6;
+  --surface: #fffbf5;
+  --ink: #4a2f28;
+  --muted: #7a5a4e;
+  --line: #f2d9b8;
+  --edge: #c08a55;
+  --accent: #f97940;
+  --accent-ink: #9c3b10;
+  --primary: #f97940;
+  --on-primary: #3a1f14;
+  --second: #3f7480;
+  --glow: #ffd283;
+  --dot: #eabd86;
+  --sky-top: #c8e4e8;
+  --sky-low: #fee8dd;
   --bad: #b3261e;
-  --display: var(--font-display), "Leelawadee UI", "Thonburi", system-ui, sans-serif;
-  --body: var(--font-body), "Leelawadee UI", "Thonburi", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --line-green: #06c755;
+  --display: var(--font-latin), var(--font-thai), "Leelawadee UI", "Thonburi", system-ui, sans-serif;
+  --body: var(--font-latin), var(--font-thai), "Leelawadee UI", "Thonburi", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1040;          /* night street */
-    --surface: #281a5c;
-    --ink: #f3ecff;
-    --muted: #bbaae6;
-    --line: #45318c;
-    --edge: #7c66cc;
-    --accent: #ffd24a;      /* lit window yellow */
-    --accent-ink: #63e2e6;  /* teal */
-    --primary: #ff74cf;     /* magenta */
-    --on-primary: #1a1040;
-    --second: #63e2e6;
-    --glow: #ffd24a;
-    --dot: #3b2a7c;
-    --sky-top: #24135f;
-    --sky-low: #5a2787;
-    --bad: #ff9aa8;
+    --bg: #0b275d;
+    --surface: #163a78;
+    --ink: #f3f1cb;
+    --muted: #adc6e5;
+    --line: #2b5284;
+    --edge: #5491c0;
+    --accent: #ffc200;
+    --accent-ink: #bdd8ea;
+    --primary: #e992c5;
+    --on-primary: #0b275d;
+    --second: #bf8be1;
+    --glow: #ffe88b;
+    --dot: #2b5284;
+    --sky-top: #1e0f74;
+    --sky-low: #1b4288;
+    --bad: #ffb3bd;
     color-scheme: dark;
   }
 }

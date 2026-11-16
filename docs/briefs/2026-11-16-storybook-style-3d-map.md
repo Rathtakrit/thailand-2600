@@ -15,13 +15,13 @@ use color and graphic like image I show."
 |---|---|---|
 | 3D map | 77 provinces as small rounded blocks arranged in Thailand's shape; drag to rotate | Light enough for phones, needs no downloaded map data, easy to change |
 | Province symbols | Dropped (owner, 2026-11-16). Blocks are plain; a province's name shows when it is tapped | 77 symbols was the largest job and the easiest to get wrong |
-| Colours | Light mode is "day" (sand, terracotta, sky blue); dark mode is "night" (deep purple, teal, magenta, warm glowing windows) | Uses both moods of the references; follows each visitor's phone setting |
+| Colours | Changed by the owner on 2026-11-16: light mode uses the owner's warm colour chart (orange #F97940, peach, sand, pale blue); dark mode uses the owner's night-sky chart (navy #0B275D, indigo, star yellow #FFC200, pink #E992C5). Text colours are darker or lighter versions so they stay readable | Owner supplied both charts; follows each visitor's phone setting |
+| Fonts | Poppins (round, easy to read) with Prompt for Thai letters, which Poppins lacks | Owner asked for a round font |
 | Graphics | New colours everywhere, the 3D map, and one drawn skyline band at the top of pages | Storybook feel without making text hard to read |
 | Reference pictures | Used for colour and mood only; nothing is traced or copied | They are other artists' work |
 
 Small technical picks (Claude's): the map is drawn with `three`, the 3D code that the model viewer already
-brought into the project, so no new download; the skyline is flat shapes drawn in code (SVG), not image files;
-fonts stay as they are.
+brought into the project, so no new download; the skyline is flat shapes drawn in code (SVG), not image files.
 
 ## Open questions
 | Question | Who answers | Blocks |
@@ -30,8 +30,8 @@ fonts stay as they are.
 | "A bit futuristic": the references are storybook, not futuristic. Claude's reading: clean shapes, glowing accents at night, the squared display font already in use. Say if you want more (for example flying vehicles in the skyline). | Owner | Step 2 |
 
 ## Out of scope
-Province symbols, illustrated backgrounds on every page, animated characters, real province borders, changing
-the fonts, re-filing existing problems by province.
+Province symbols, illustrated backgrounds on every page, animated characters, real province borders,
+re-filing existing problems by province.
 
 ## Steps
 | # | Step | Who | How to check |
