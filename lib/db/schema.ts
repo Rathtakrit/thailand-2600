@@ -1,4 +1,4 @@
-import { boolean, index, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 import type { Scores, Verdict } from "../scoring";
 
 const createdAt = () => timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
@@ -105,4 +105,18 @@ export const aiCalls = pgTable(
     createdAt: createdAt(),
   },
   (t) => [index("ai_calls_user_kind").on(t.userId, t.kind, t.createdAt)],
+);
+
+/** One uploaded picture or 3D model. The bytes live in file storage (lib/storage.ts) under the same id. */
+export const files = pgTable(
+  "files",
+  {
+    id: text("id").primaryKey(),
+    ownerId: text("owner_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull(),
+    contentType: text("content_type").notNull(),
+    size: integer("size").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("files_owner_created").on(t.ownerId, t.createdAt)],
 );
