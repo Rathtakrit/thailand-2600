@@ -12,7 +12,7 @@ import { getDb, schema } from "@/lib/db";
 import { runJudge, takeAiTurn } from "@/lib/judge";
 import { clampScore, CRIT_KEYS, type Scores } from "@/lib/scoring";
 
-const { problems, solutions, comments, likes, votes, reviews, translations } = schema;
+const { problems, solutions, comments, likes, votes, reviews, translations, files } = schema;
 
 async function requireUser(): Promise<string> {
   const session = await auth();
@@ -58,10 +58,14 @@ export async function createSolution(form: FormData) {
   const db = await getDb();
   const [p] = await db.select({ id: problems.id }).from(problems).where(eq(problems.id, problemId));
   if (!p) return;
+  // A picture must be one this person uploaded, and must be a picture.
+  const wanted = text(form, "imageId", 40);
+  const [pic] = wanted ? await db.select({ id: files.id }).from(files).where(and(eq(files.id, wanted), eq(files.ownerId, userId), eq(files.kind, "image"))) : [];
+  const imageId = pic?.id ?? null;
   const id = newId("s");
   // The verdict is written after the response is sent; the page shows "reading" until it lands.
   const judgeNow = aiEnabled() && (await takeAiTurn(userId, "judge"));
-  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, aiStatus: judgeNow ? "pending" : "none" });
+  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, aiStatus: judgeNow ? "pending" : "none" });
   if (judgeNow) after(() => runJudge(id));
   refresh();
 }

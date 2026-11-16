@@ -41,7 +41,7 @@ export async function getProblem(id: string, userId: string | null, lang: Lang) 
 
   const likeCount = sql<number>`(select count(*)::int from likes l where l.solution_id = "solutions"."id")`;
   const solRows = await db
-    .select({ id: solutions.id, title: solutions.title, body: solutions.body, authorId: solutions.authorId, createdAt: solutions.createdAt, authorName: users.name, likes: likeCount, aiStatus: solutions.aiStatus, ai: solutions.ai, aiAt: solutions.aiAt })
+    .select({ id: solutions.id, title: solutions.title, body: solutions.body, authorId: solutions.authorId, createdAt: solutions.createdAt, authorName: users.name, likes: likeCount, aiStatus: solutions.aiStatus, ai: solutions.ai, aiAt: solutions.aiAt, imageId: solutions.imageId })
     .from(solutions)
     .leftJoin(users, eq(users.id, solutions.authorId))
     .where(eq(solutions.problemId, id))

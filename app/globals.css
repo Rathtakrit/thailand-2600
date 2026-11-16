@@ -13,6 +13,7 @@
   --sky-top: #e3e0f2;
   --sky-low: #fbe8c6;
   --line-green: #06c755;
+  --bad: #b3261e;
   --display: var(--font-display), "Leelawadee UI", "Thonburi", system-ui, sans-serif;
   --body: var(--font-body), "Leelawadee UI", "Thonburi", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -20,7 +21,7 @@
   :root {
     --bg: #10122b; --surface: #181b3c; --ink: #eceaf7; --muted: #a3a5c9; --line: #2d3160;
     --accent: #ffb52e; --accent-ink: #ffc65c; --primary: #ffb52e; --on-primary: #1b1400;
-    --dot: #34386b; --sky-top: #0b0d24; --sky-low: #2b2350; color-scheme: dark;
+    --dot: #34386b; --sky-top: #0b0d24; --sky-low: #2b2350; --bad: #ff8a80; color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
@@ -117,6 +118,9 @@ select, input[type="text"], textarea { background: var(--surface); border: 1px s
 .radar text { font-family: var(--body); font-size: 10.5px; fill: var(--muted); }
 .total { font-family: var(--display); font-weight: 700; font-size: 2.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
 .total small { font-size: 1rem; color: var(--muted); font-weight: 500; }
+.vis { display: block; max-width: min(100%, 560px); max-height: 420px; width: auto; height: auto; border: 1px solid var(--line); border-radius: 4px; background: #ffffff; }
+.filepick { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.err { color: var(--bad); font-size: 0.9rem; }
 .verdict { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 65ch; }
 .verdict dt { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .verdict dd { margin: 0; overflow-wrap: anywhere; }

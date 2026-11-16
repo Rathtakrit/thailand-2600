@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { addComment, askJudge, createSolution, removeOwn, saveReview, toggleLike, toggleVote, translate } from "@/app/actions";
+import { addComment, askJudge, removeOwn, saveReview, toggleLike, toggleVote, translate } from "@/app/actions";
 import AutoRefresh from "@/components/AutoRefresh";
+import PitchForm from "@/components/PitchForm";
 import Radar from "@/components/Radar";
 import { aiEnabled } from "@/lib/ai";
 import { CATS, CRITERIA, label, REGIONS, type Dict, type Lang } from "@/lib/content";
@@ -121,6 +122,8 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
                   <TrControl kind="solution" id={s.id} problemId={p.id} foreign={foreign(s.title + s.body)} translated={tr.has(`solution:${s.id}`)} showOrig={showOrig} canAsk={canAsk} t={t} />
                 </div>
               </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {s.imageId ? <img className="vis" src={`/files/${s.imageId}`} alt={`${t.picAlt} ${s.title}`} loading="lazy" /> : null}
               <p className="prose">{sTr?.body ?? s.body}</p>
 
               {s.ai ? (
@@ -204,13 +207,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
       {userId ? (
         <details className="pitch" open={sols.length === 0}>
           <summary>{t.pitchBtn}</summary>
-          <form className="form" action={createSolution}>
-            <input type="hidden" name="problemId" value={p.id} />
-            <p className="muted small">{t.dsHint}</p>
-            <div className="field"><label htmlFor="sTitle">{t.dsName}</label><input type="text" id="sTitle" name="title" required minLength={6} maxLength={160} /></div>
-            <div className="field"><label htmlFor="sBody">{t.dsBody}</label><textarea id="sBody" name="body" required minLength={60} maxLength={4000} /></div>
-            <div><button className="btn primary" type="submit">{t.dsSubmit}</button></div>
-          </form>
+          <PitchForm problemId={p.id} t={t} />
         </details>
       ) : (
         <p className="notice" style={{ marginTop: 28 }}>{t.needSignIn} <Link href="/signin">{t.signIn}</Link></p>

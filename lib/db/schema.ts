@@ -33,6 +33,8 @@ export const solutions = pgTable("solutions", {
   title: text("title").notNull(),
   body: text("body").notNull(),
   authorId: text("author_id").references(() => users.id, { onDelete: "set null" }),
+  /** The pitch's picture, if it has one (an uploaded file). */
+  imageId: text("image_id").references(() => files.id, { onDelete: "set null" }),
   /** AI judging: "none" (not asked), "pending", "done", "refused" or "failed". */
   aiStatus: text("ai_status").notNull().default("none"),
   ai: jsonb("ai").$type<Verdict>(),
