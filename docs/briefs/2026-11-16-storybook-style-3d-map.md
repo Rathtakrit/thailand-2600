@@ -14,7 +14,7 @@ use color and graphic like image I show."
 | Topic | Decision | Why |
 |---|---|---|
 | 3D map | 77 provinces as small rounded blocks arranged in Thailand's shape; drag to rotate | Light enough for phones, needs no downloaded map data, easy to change |
-| Province symbols | Claude proposes one thing per province and draws it as a simple flat icon; owner and teammate approve the list first | A wrong symbol for a province would be noticed by people who live there |
+| Province symbols | Dropped (owner, 2026-11-16). Blocks are plain; a province's name shows when it is tapped | 77 symbols was the largest job and the easiest to get wrong |
 | Colours | Light mode is "day" (sand, terracotta, sky blue); dark mode is "night" (deep purple, teal, magenta, warm glowing windows) | Uses both moods of the references; follows each visitor's phone setting |
 | Graphics | New colours everywhere, the 3D map, and one drawn skyline band at the top of pages | Storybook feel without making text hard to read |
 | Reference pictures | Used for colour and mood only; nothing is traced or copied | They are other artists' work |
@@ -26,24 +26,21 @@ fonts stay as they are.
 ## Open questions
 | Question | Who answers | Blocks |
 |---|---|---|
-| The 77 symbols: is each one right for its province? | Owner and Rathtakrit | Step 4 |
 | Problems are filed by region today (North, Isan and so on). Should "Name a problem" ask for a province instead? Claude's suggestion: for now tapping a province filters to its region; add provinces to problems as a later step. | Owner | Nothing in this brief |
 | "A bit futuristic": the references are storybook, not futuristic. Claude's reading: clean shapes, glowing accents at night, the squared display font already in use. Say if you want more (for example flying vehicles in the skyline). | Owner | Step 2 |
 
 ## Out of scope
-Illustrated backgrounds on every page, animated characters, real province borders, changing the fonts,
-re-filing existing problems by province.
+Province symbols, illustrated backgrounds on every page, animated characters, real province borders, changing
+the fonts, re-filing existing problems by province.
 
 ## Steps
 | # | Step | Who | How to check |
 |---|---|---|---|
 | 1 | New colours for day and night across the whole site | Claude | Every page at phone and desktop size, in light and dark mode; text is easy to read |
 | 2 | Drawn skyline band in the page top: rooftops and bunting by day, moon and glowing windows by night | Claude | Home page in both modes |
-| 3 | Province list: all 77 with region, position on the block map and a proposed symbol, as a table for approval | Claude writes, you and Rathtakrit approve | Read the table; mark any wrong symbol |
-| 4 | 3D block map: rotate by dragging, tap a province to filter, plain dots until symbols are approved | Claude | Rotate and tap at phone and desktop size; a flat list of regions stays for people who cannot use the 3D map |
-| 5 | Draw the approved symbols and place them on the blocks | Claude | Each province shows its symbol; names appear on tap |
+| 3 | 3D block map of 77 provinces: drag to rotate, tap a province to see its name and filter to its region; blocks are coloured by region and glow where problems have been named | Claude | Rotate and tap at phone and desktop size; a flat list of regions stays for people who cannot use the 3D map |
 
 ## Done means
 A visitor on a phone sees the storybook colours in their own light or dark setting, can turn the 3D map with a
-finger, can tell provinces apart by their symbols, and can still read and use every page. People who use a
+finger, can tap a province to see its name, and can still read and use every page. People who use a
 keyboard or screen reader can filter by place without the 3D map.
