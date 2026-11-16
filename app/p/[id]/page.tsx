@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { addComment, askJudge, removeOwn, saveReview, toggleLike, toggleVote, translate } from "@/app/actions";
 import AutoRefresh from "@/components/AutoRefresh";
+import ModelView from "@/components/ModelView";
 import PitchForm from "@/components/PitchForm";
 import Radar from "@/components/Radar";
 import { aiEnabled } from "@/lib/ai";
@@ -124,6 +125,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {s.imageId ? <img className="vis" src={`/files/${s.imageId}`} alt={`${t.picAlt} ${s.title}`} loading="lazy" /> : null}
+              {s.modelId ? <ModelView src={`/files/${s.modelId}`} alt={`${t.modelAlt} ${s.title}`} hint={t.modelRotate} loading={t.modelLoading} /> : null}
               <p className="prose">{sTr?.body ?? s.body}</p>
 
               {s.ai ? (

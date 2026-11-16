@@ -81,6 +81,8 @@ const en = {
   picLabel: "Show it (optional)", picHint: "Draw your solution, or add a photo, sketch or diagram (PNG, JPEG or WebP). You can draw on top of a picture.", picChoose: "Choose a picture", picChange: "Choose another", picRemove: "Remove picture",
   picUploading: "Uploading…", picErrType: "That file is not a picture we can read. Use a PNG, JPEG or WebP.", picErrBig: "That picture is too big even after shrinking. Try another one.", picErrLimit: "You have uploaded the most files allowed for today. Try again tomorrow.", picErrFail: "The picture did not upload. Check your connection and try again.", picAlt: "Picture for the solution:",
   drawBtn: "Draw it", drawOn: "Draw on this picture", drawHint: "Draw with your finger or mouse. Press \"Use this drawing\" when you are done.", drawUndo: "Undo", drawClear: "Clear", drawDone: "Use this drawing", drawCancel: "Cancel", drawColour: "Colour", drawShade: "Dark to light", drawSize: "Line thickness",
+  modelLabel: "Add a 3D model (optional)", modelHint: "A .glb file up to 10 MB. Visitors can turn it around.", modelChoose: "Choose a 3D model", modelChange: "Choose another model", modelRemove: "Remove model",
+  modelErrType: "That file is not a .glb 3D model. Export your model as .glb and try again.", modelErrBig: "That model is over 10 MB. Export a smaller or simpler one.", modelRotate: "Drag to turn it. Pinch or scroll to zoom.", modelLoading: "Loading the 3D model…", modelAlt: "3D model for the solution:",
   notFound: "This problem is no longer here.",
 };
 
@@ -118,6 +120,8 @@ const th: typeof en = {
   picLabel: "ทำให้เห็นภาพ (ไม่บังคับ)", picHint: "วาดทางแก้ของคุณ หรือใส่ภาพถ่าย ภาพร่าง หรือแผนผัง (PNG, JPEG หรือ WebP) แล้ววาดทับภาพได้", picChoose: "เลือกภาพ", picChange: "เลือกภาพอื่น", picRemove: "ลบภาพ",
   picUploading: "กำลังอัปโหลด…", picErrType: "อ่านไฟล์นี้เป็นภาพไม่ได้ ใช้ไฟล์ PNG, JPEG หรือ WebP", picErrBig: "ภาพนี้ใหญ่เกินไปแม้ย่อแล้ว ลองใช้ภาพอื่น", picErrLimit: "วันนี้คุณอัปโหลดครบจำนวนที่กำหนดแล้ว ลองใหม่พรุ่งนี้", picErrFail: "อัปโหลดภาพไม่สำเร็จ ตรวจการเชื่อมต่อแล้วลองอีกครั้ง", picAlt: "ภาพประกอบทางแก้:",
   drawBtn: "วาดเอง", drawOn: "วาดทับภาพนี้", drawHint: "วาดด้วยนิ้วหรือเมาส์ เสร็จแล้วกด \"ใช้ภาพวาดนี้\"", drawUndo: "ย้อนกลับ", drawClear: "ล้าง", drawDone: "ใช้ภาพวาดนี้", drawCancel: "ยกเลิก", drawColour: "สี", drawShade: "เข้มถึงอ่อน", drawSize: "ความหนาของเส้น",
+  modelLabel: "ใส่โมเดล 3 มิติ (ไม่บังคับ)", modelHint: "ไฟล์ .glb ขนาดไม่เกิน 10 MB ผู้ชมหมุนดูได้รอบด้าน", modelChoose: "เลือกโมเดล 3 มิติ", modelChange: "เลือกโมเดลอื่น", modelRemove: "ลบโมเดล",
+  modelErrType: "ไฟล์นี้ไม่ใช่โมเดล 3 มิติแบบ .glb ส่งออกโมเดลเป็น .glb แล้วลองอีกครั้ง", modelErrBig: "โมเดลนี้ใหญ่เกิน 10 MB ส่งออกให้เล็กหรือเรียบง่ายกว่านี้", modelRotate: "ลากเพื่อหมุน ถ่างนิ้วหรือเลื่อนเพื่อซูม", modelLoading: "กำลังโหลดโมเดล 3 มิติ…", modelAlt: "โมเดล 3 มิติของทางแก้:",
   notFound: "ไม่พบปัญหานี้แล้ว",
 };
 

@@ -58,14 +58,19 @@ export async function createSolution(form: FormData) {
   const db = await getDb();
   const [p] = await db.select({ id: problems.id }).from(problems).where(eq(problems.id, problemId));
   if (!p) return;
-  // A picture must be one this person uploaded, and must be a picture.
-  const wanted = text(form, "imageId", 40);
-  const [pic] = wanted ? await db.select({ id: files.id }).from(files).where(and(eq(files.id, wanted), eq(files.ownerId, userId), eq(files.kind, "image"))) : [];
-  const imageId = pic?.id ?? null;
+  // A picture or 3D model must be one this person uploaded, and of the right kind.
+  const ownFile = async (field: string, kind: string) => {
+    const wanted = text(form, field, 40);
+    if (!wanted) return null;
+    const [row] = await db.select({ id: files.id }).from(files).where(and(eq(files.id, wanted), eq(files.ownerId, userId), eq(files.kind, kind)));
+    return row?.id ?? null;
+  };
+  const imageId = await ownFile("imageId", "image");
+  const modelId = await ownFile("modelId", "model");
   const id = newId("s");
   // The verdict is written after the response is sent; the page shows "reading" until it lands.
   const judgeNow = aiEnabled() && (await takeAiTurn(userId, "judge"));
-  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, aiStatus: judgeNow ? "pending" : "none" });
+  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, modelId, aiStatus: judgeNow ? "pending" : "none" });
   if (judgeNow) after(() => runJudge(id));
   refresh();
 }

@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import { createSolution } from "@/app/actions";
 import type { Dict } from "@/lib/content";
 import DrawPad, { type DrawLabels } from "./DrawPad";
+import ModelView from "./ModelView";
 
-type Labels = Pick<Dict, "dsHint" | "dsName" | "dsBody" | "dsSubmit" | "picLabel" | "picHint" | "picChoose" | "picChange" | "picRemove" | "picUploading" | "picErrType" | "picErrBig" | "picErrLimit" | "picErrFail" | "drawBtn" | "drawOn"> & DrawLabels;
+type Labels = Pick<Dict, "dsHint" | "dsName" | "dsBody" | "dsSubmit" | "picLabel" | "picHint" | "picChoose" | "picChange" | "picRemove" | "picUploading" | "picErrType" | "picErrBig" | "picErrLimit" | "picErrFail" | "drawBtn" | "drawOn" | "modelLabel" | "modelHint" | "modelChoose" | "modelChange" | "modelRemove" | "modelErrType" | "modelErrBig" | "modelRotate" | "modelLoading"> & DrawLabels;
 
 const MAX_SIDE = 1600;
+const MAX_MODEL_BYTES = 10 * 1024 * 1024;
 
 /** Shrinks a picture in the browser so uploads stay small on a phone connection. */
 async function shrink(file: File): Promise<Blob | null> {
@@ -38,6 +40,31 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
   const input = useRef<HTMLInputElement>(null);
 
   const [drawing, setDrawing] = useState(false);
+  const [model, setModel] = useState<{ id: string; url: string } | null>(null);
+  const [modelBusy, setModelBusy] = useState(false);
+  const [modelError, setModelError] = useState("");
+  const modelInput = useRef<HTMLInputElement>(null);
+
+  /** A 3D model goes up as it is; only its size is checked here so the message is quick. */
+  async function chooseModel(file: File | undefined) {
+    if (!file) return;
+    setModelError("");
+    if (file.size > MAX_MODEL_BYTES) return setModelError(t.modelErrBig);
+    setModelBusy(true);
+    try {
+      const body = new FormData();
+      body.append("file", file, "model.glb");
+      const res = await fetch("/api/files", { method: "POST", body });
+      const saved = res.status === 201 ? ((await res.json()) as { id: string; url: string; kind: string }) : null;
+      if (saved?.kind === "model") setModel({ id: saved.id, url: saved.url });
+      else setModelError(res.status === 413 ? t.modelErrBig : res.status === 429 ? t.picErrLimit : res.status === 201 || res.status === 415 ? t.modelErrType : t.picErrFail);
+    } catch {
+      setModelError(t.picErrFail);
+    } finally {
+      setModelBusy(false);
+      if (modelInput.current) modelInput.current.value = "";
+    }
+  }
 
   async function choose(file: File | undefined) {
     if (!file) return;
@@ -73,10 +100,12 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
         await createSolution(data);
         setPic(null);
         setDrawing(false);
+        setModel(null);
       }}
     >
       <input type="hidden" name="problemId" value={problemId} />
       <input type="hidden" name="imageId" value={pic?.id ?? ""} />
+      <input type="hidden" name="modelId" value={model?.id ?? ""} />
       <p className="muted small">{t.dsHint}</p>
       <div className="field"><label htmlFor="sTitle">{t.dsName}</label><input type="text" id="sTitle" name="title" required minLength={6} maxLength={160} /></div>
       <div className="field"><label htmlFor="sBody">{t.dsBody}</label><textarea id="sBody" name="body" required minLength={60} maxLength={4000} /></div>
@@ -108,7 +137,19 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
         {error ? <p className="err" role="alert">{error}</p> : null}
       </div>
 
-      <div><button className="btn primary" type="submit" disabled={busy || drawing}>{t.dsSubmit}</button></div>
+      <div className="field">
+        <label htmlFor="sModel">{t.modelLabel}</label>
+        <span className="muted small">{t.modelHint}</span>
+        {model ? <ModelView src={model.url} alt="" hint={t.modelRotate} loading={t.modelLoading} /> : null}
+        <input ref={modelInput} className="filepick" type="file" id="sModel" accept=".glb,model/gltf-binary" onChange={(e) => chooseModel(e.target.files?.[0])} />
+        <div className="acts" style={{ marginTop: 0 }}>
+          <button className="btn" type="button" disabled={modelBusy} onClick={() => modelInput.current?.click()}>{modelBusy ? t.picUploading : model ? t.modelChange : t.modelChoose}</button>
+          {model && !modelBusy ? <button className="link" type="button" onClick={() => setModel(null)}>{t.modelRemove}</button> : null}
+        </div>
+        {modelError ? <p className="err" role="alert">{modelError}</p> : null}
+      </div>
+
+      <div><button className="btn primary" type="submit" disabled={busy || drawing || modelBusy}>{t.dsSubmit}</button></div>
     </form>
   );
 }
