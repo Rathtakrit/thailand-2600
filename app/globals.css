@@ -129,7 +129,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .stats div { display: flex; flex-direction: column; }
 .stats dt { order: 2; font-size: 0.8rem; color: var(--muted); }
 .stats dd { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.mapbox { display: flex; gap: 18px; align-items: center; }
+.mapbox { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; justify-content: center; }
+/* The 3D province map. Block colours per region: day from the warm chart, night from the night-sky chart. */
+.map3dwrap { width: min(100%, 340px); }
+.map3d { position: relative; width: 100%; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center;
+  --rg-north: #9faf64; --rg-isan: #f97940; --rg-central: #ffd283; --rg-bkk: #e8755b; --rg-east: #77c9c5; --rg-west: #d9a373; --rg-south: #6c909e; --rg-none: #f9e5cc; }
+.map3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+.map3d canvas:active { cursor: grabbing; }
+.mapnote { min-height: 3em; text-align: center; margin-top: 4px; }
+.mapnote a { color: var(--accent-ink); }
+@media (prefers-color-scheme: dark) {
+  .map3d { --rg-north: #88a5df; --rg-isan: #e992c5; --rg-central: #bf8be1; --rg-bkk: #ffc200; --rg-east: #51aac1; --rg-west: #6755a0; --rg-south: #3785d8; --rg-none: #22509c; }
+}
 .map { width: 172px; max-width: 100%; height: auto; display: block; }
 .dot { fill: var(--dot); transition: fill 0.2s; }
 .dot.has { fill: var(--accent); }

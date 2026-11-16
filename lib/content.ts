@@ -85,6 +85,7 @@ const en = {
   modelErrType: "That file is not a .glb 3D model. Export your model as .glb and try again.", modelErrBig: "That model is over 10 MB. Export a smaller or simpler one.", modelRotate: "Drag to turn it. Pinch or scroll to zoom.", modelLoading: "Loading the 3D model…", modelAlt: "3D model for the solution:",
   tabVisuals: "Visualized solutions", visHead: "Visualized solutions", visLede: "Every solution that comes with a drawing, a picture or a 3D model. Open one to read the pitch and its verdict.", visEmpty: "No visualized solutions yet. Pitch a solution and draw it.",
   forProblem: "For", likesWord: "likes", visModelOnly: "3D model. Open to turn it around.", visHas3d: "3D",
+  mapHint: "Drag to turn the map. Tap a province to see its name.", mapShow: "Show problems in", mapAria: "A 3D map of Thailand's 77 provinces. Use the list of regions beside it to filter.",
   notFound: "This problem is no longer here.",
 };
 
@@ -126,6 +127,7 @@ const th: typeof en = {
   modelErrType: "ไฟล์นี้ไม่ใช่โมเดล 3 มิติแบบ .glb ส่งออกโมเดลเป็น .glb แล้วลองอีกครั้ง", modelErrBig: "โมเดลนี้ใหญ่เกิน 10 MB ส่งออกให้เล็กหรือเรียบง่ายกว่านี้", modelRotate: "ลากเพื่อหมุน ถ่างนิ้วหรือเลื่อนเพื่อซูม", modelLoading: "กำลังโหลดโมเดล 3 มิติ…", modelAlt: "โมเดล 3 มิติของทางแก้:",
   tabVisuals: "ทางแก้แบบเห็นภาพ", visHead: "ทางแก้แบบเห็นภาพ", visLede: "ทางแก้ทุกข้อที่มีภาพวาด ภาพประกอบ หรือโมเดล 3 มิติ เปิดดูเพื่ออ่านข้อเสนอและคำตัดสิน", visEmpty: "ยังไม่มีทางแก้แบบเห็นภาพ ลองเสนอทางแก้แล้ววาดดู",
   forProblem: "สำหรับปัญหา", likesWord: "ถูกใจ", visModelOnly: "โมเดล 3 มิติ เปิดเพื่อหมุนดู", visHas3d: "3 มิติ",
+  mapHint: "ลากเพื่อหมุนแผนที่ แตะจังหวัดเพื่อดูชื่อ", mapShow: "ดูปัญหาใน", mapAria: "แผนที่ 3 มิติของ 77 จังหวัดในประเทศไทย ใช้รายชื่อภูมิภาคด้านข้างเพื่อกรอง",
   notFound: "ไม่พบปัญหานี้แล้ว",
 };
 
