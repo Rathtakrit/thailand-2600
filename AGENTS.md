@@ -1,7 +1,8 @@
 # Thailand 2026 rules
 
 A website where people post predictions about Thailand's future, post problems they see, and reply with solutions.
-Idea stage: no code and no tech stack yet. Decisions go in `docs/briefs/` once `/kickoff` has run.
+A first version of the app now lives in this repo (see `README.md`). The choices made so far and their reasons
+are in `docs/briefs/2026-11-first-build.md`; new decisions go in `docs/briefs/` too.
 
 The people working on this are new to coding or not programmers, and use the project to learn. They design and
 decide; the AI plans, explains, builds and checks. Claude Code is the main tool. This file is the one rules file;
@@ -57,3 +58,13 @@ own line, plus how to stop it.
 ## Always
 - Keep it small: the fewest files, packages and settings that do the job (`/lean`).
 - Before saying something works, check it in the running preview.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
