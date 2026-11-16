@@ -3,6 +3,7 @@ import { addComment, askJudge, removeOwn, saveReview, toggleLike, toggleVote, tr
 import AutoRefresh from "@/components/AutoRefresh";
 import ModelView from "@/components/ModelView";
 import PitchForm from "@/components/PitchForm";
+import ScrollToHash from "@/components/ScrollToHash";
 import Radar from "@/components/Radar";
 import { aiEnabled } from "@/lib/ai";
 import { CATS, CRITERIA, label, REGIONS, type Dict, type Lang } from "@/lib/content";
@@ -67,6 +68,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
   return (
     <div className="wrap page">
       {anyPending ? <AutoRefresh /> : null}
+      <ScrollToHash />
       <Link className="back" href="/">{t.back}</Link>
       {sp.limit === "1" ? <p className="notice">{t.limitHit}</p> : null}
       <div className="phead">
@@ -97,7 +99,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
         const statusText = status === "pending" ? t.judging : status === "failed" ? t.judgeFailed : status === "refused" ? t.judgeRefused : ai ? t.notJudged : t.judgeOff;
         const basis = !final ? "" : final.hasAi ? (final.people ? `${t.aiPlus} ${final.people}` : t.aiOnly) : `${t.peopleOnly} ${final.people}`;
         return (
-          <article className="sol" key={s.id}>
+          <article className="sol" key={s.id} id={`s-${s.id}`}>
             <div className="solside">
               <Radar final={final?.by ?? null} ai={s.ai?.scores ?? null} lang={lang} />
               {final ? (

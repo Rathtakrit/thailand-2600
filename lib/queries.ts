@@ -1,7 +1,7 @@
-import { and, asc, count, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, isNotNull, or, sql } from "drizzle-orm";
 import type { Lang } from "./content";
 import { getDb, schema } from "./db";
-import type { Scores } from "./scoring";
+import { finalScore, type Scores } from "./scoring";
 
 const { problems, solutions, comments, likes, votes, users, reviews, translations } = schema;
 
@@ -78,4 +78,21 @@ export async function getProblem(id: string, userId: string | null, lang: Lang) 
   const tr = new Map(trRows.map((r) => [`${r.kind}:${r.refId}`, r.data]));
 
   return { problem, sols, comments: cmts, liked: new Set(myLikes.map((r) => r.id)), seenByMe: myVote.length > 0, reviewsBy, myReviews, tr };
+}
+
+/** Every solution that has a picture, drawing or 3D model, newest first, with its score and likes. */
+export async function listVisuals() {
+  const db = await getDb();
+  const likeCount = sql<number>`(select count(*)::int from likes l where l.solution_id = "solutions"."id")`;
+  const rows = await db
+    .select({ id: solutions.id, title: solutions.title, problemId: solutions.problemId, problemTitle: problems.title, imageId: solutions.imageId, modelId: solutions.modelId, ai: solutions.ai, authorName: users.name, likes: likeCount })
+    .from(solutions)
+    .innerJoin(problems, eq(problems.id, solutions.problemId))
+    .leftJoin(users, eq(users.id, solutions.authorId))
+    .where(or(isNotNull(solutions.imageId), isNotNull(solutions.modelId)))
+    .orderBy(desc(solutions.createdAt))
+    .limit(120);
+  const ids = rows.map((r) => r.id);
+  const revs = ids.length ? await db.select({ solutionId: reviews.solutionId, scores: reviews.scores }).from(reviews).where(inArray(reviews.solutionId, ids)) : [];
+  return rows.map((r) => ({ ...r, final: finalScore(r.ai?.scores, revs.filter((v) => v.solutionId === r.id).map((v) => v.scores)) }));
 }
