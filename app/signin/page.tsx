@@ -13,6 +13,10 @@ export default async function SignIn({ searchParams }: { searchParams: Promise<R
       <div className="signin">
         <h1 style={{ fontSize: "1.6rem" }}>{t.siTitle}</h1>
         <p className="muted">{t.siLede}</p>
+        <div className="notice privacy">
+          <h2>{t.siPrivacyHead}</h2>
+          <p>{t.siPrivacy}</p>
+        </div>
         <form action={signInWith}>
           <input type="hidden" name="provider" value="line" />
           <button className="btn line" type="submit" disabled={!hasLine}>{t.siLine}{hasLine ? "" : ` (${t.siNotSet})`}</button>

@@ -41,6 +41,8 @@ Small technical picks (Claude's, change if you disagree): one picture and one 3D
 | `AGENTS.md` still says the site is for predictions. May that line change? | Rathtakrit | Nothing; the rules file is his |
 | The prototype does not show: the 3D viewer, the report button, upload errors. Claude proposes each inside its step for the owner to approve. | Owner | Steps 4 and 6 |
 | Should the repo name (thailand-2026) match the site name (Thailand 2600)? | Both | Nothing |
+| The privacy notice says "to have your account and posts removed, ask the person who invited you". There is no delete-account button yet; a removal is done by hand in the database. Who handles requests, and is a contact address needed before more people join? | Owner | Opening to the public |
+| The privacy notice says solutions go to "an AI service". Name it once Rathtakrit's AI is known. | Rathtakrit | Opening to the public |
 
 ## Out of scope for this brief
 Inbox and email notices, awards and badges, a review queue for approving posts before they show, hosting, the

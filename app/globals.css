@@ -262,6 +262,7 @@ textarea { min-height: 150px; resize: vertical; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .signin { max-width: 420px; display: flex; flex-direction: column; gap: 14px; }
 .signin .btn { width: 100%; text-align: center; padding-block: 12px; }
+.privacy { margin: 0; } .privacy h2 { font-size: 0.95rem; margin-bottom: 4px; }
 .signin hr { width: 100%; border: 0; border-top: 1px solid var(--line); margin-block: 8px; }
 
 @media (prefers-reduced-motion: reduce) { .dot { transition: none; } .pulse { animation: none; } }
