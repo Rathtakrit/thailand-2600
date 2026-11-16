@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Skyline from "@/components/Skyline";
 import ThaiMap from "@/components/ThaiMap";
 import { CATS, CRITERIA, label, REGIONS } from "@/lib/content";
 import { homeStats, listProblems } from "@/lib/queries";
@@ -46,6 +47,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
           </div>
           <ThaiMap counts={stats.byRegion} selected={region || undefined} lang={lang} hrefFor={hrefFor} />
         </div>
+        <Skyline />
       </div>
 
       <div className="wrap">

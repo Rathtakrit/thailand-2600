@@ -80,7 +80,34 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .me img { width: 28px; height: 28px; border-radius: 50%; display: block; }
 
 /* hero */
-.hero { background: linear-gradient(180deg, var(--sky-top), var(--sky-low)); border-bottom: 1px solid var(--line); }
+.hero { background: linear-gradient(180deg, var(--sky-top), var(--sky-low)); }
+.heroin { position: relative; z-index: 1; }
+
+/* The drawn town under the page top. Day colours come from the warm chart, night from the night-sky chart. */
+.skyline { display: block; width: 100%; height: clamp(110px, 13.4vw, 190px); margin-top: -28px;
+  --w1: #fbc9ae; --w2: #eabd86; --w3: #b2d0b5; --w4: #adccd1;
+  --r1: #f97940; --r2: #e8755b; --r3: #aa695b;
+  --win: #fffbf5; --win-off: #fffbf5; --orb: #ffd283; --star: transparent; --cloud: #fffbf5;
+  --rail: #d9a373; --train: #6c909e; --string: #aa695b;
+  --f1: #f97940; --f2: #77c9c5; --f3: #ffdb7b; --f4: #e8755b; }
+.sk-wall.w1 { fill: var(--w1); } .sk-wall.w2 { fill: var(--w2); } .sk-wall.w3 { fill: var(--w3); } .sk-wall.w4 { fill: var(--w4); }
+.sk-roof.r1 { fill: var(--r1); } .sk-roof.r2 { fill: var(--r2); } .sk-roof.r3 { fill: var(--r3); }
+.sk-win { fill: var(--win); } .sk-win.off { fill: var(--win-off); }
+.sk-orb { fill: var(--orb); } .sk-orb-bite { fill: none; } .sk-star { fill: var(--star); } .sk-cloud { fill: var(--cloud); opacity: 0.85; }
+.sk-rail { fill: var(--rail); } .sk-train { fill: var(--train); }
+.sk-string { fill: none; stroke: var(--string); stroke-width: 1.2; }
+.sk-flag.f1 { fill: var(--f1); } .sk-flag.f2 { fill: var(--f2); } .sk-flag.f3 { fill: var(--f3); } .sk-flag.f4 { fill: var(--f4); }
+.sk-ground { fill: var(--bg); }
+@media (prefers-color-scheme: dark) {
+  .skyline {
+    --w1: #22509c; --w2: #2b5284; --w3: #6755a0; --w4: #5b4885;
+    --r1: #0c3782; --r2: #1e0f74; --r3: #4f619b;
+    --win: #ffe88b; --win-off: #0b275d; --orb: #f3f1cb; --star: #ffe88b; --cloud: transparent;
+    --rail: #4f619b; --train: #88a5df; --string: #adc6e5;
+    --f1: #e992c5; --f2: #bf8be1; --f3: #ffc200; --f4: #88a5df; }
+  /* A second circle the colour of the sky turns the full circle into a crescent moon. */
+  .sk-orb-bite { fill: #1c2a80; }
+}
 .heroin { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: center; padding-block: 28px 44px; }
 .eyebrow { font-family: var(--display); letter-spacing: 0.14em; font-size: 0.9rem; color: var(--accent-ink); }
 .hero h1 { font-size: clamp(2rem, 5.2vw, 3.5rem); font-weight: 700; margin-block: 10px 16px; }
