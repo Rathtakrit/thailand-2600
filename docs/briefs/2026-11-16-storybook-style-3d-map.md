@@ -18,6 +18,7 @@ use color and graphic like image I show."
 | Colours | Changed by the owner on 2026-11-16: light mode uses the owner's warm colour chart (orange #F97940, peach, sand, pale blue); dark mode uses the owner's night-sky chart (navy #0B275D, indigo, star yellow #FFC200, pink #E992C5). Text colours are darker or lighter versions so they stay readable | Owner supplied both charts; follows each visitor's phone setting |
 | Fonts | Poppins (round, easy to read) with Prompt for Thai letters, which Poppins lacks | Owner asked for a round font |
 | Graphics | New colours everywhere, the 3D map, and one drawn skyline band at the top of pages | Storybook feel without making text hard to read |
+| Skyline subject | A Thai street (owner, 2026-11-16): shophouses with shutters, awnings and balconies, a chedi, an elevated train, a food cart, a songthaew, a tuk-tuk, utility wires, a red-and-white kerb | Owner wanted buildings that look Thai, with four reference pictures used for subject only |
 | Reference pictures | Used for colour and mood only; nothing is traced or copied | They are other artists' work |
 
 Small technical picks (Claude's): the map is drawn with `three`, the 3D code that the model viewer already

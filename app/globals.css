@@ -83,30 +83,41 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero { background: linear-gradient(180deg, var(--sky-top), var(--sky-low)); }
 .heroin { position: relative; z-index: 1; }
 
-/* The drawn town under the page top. Day colours come from the warm chart, night from the night-sky chart. */
-.skyline { display: block; width: 100%; height: clamp(110px, 13.4vw, 190px); margin-top: -28px;
-  --w1: #fbc9ae; --w2: #eabd86; --w3: #b2d0b5; --w4: #adccd1;
-  --r1: #f97940; --r2: #e8755b; --r3: #aa695b;
-  --win: #fffbf5; --win-off: #fffbf5; --orb: #ffd283; --star: transparent; --cloud: #fffbf5;
-  --rail: #d9a373; --train: #6c909e; --string: #aa695b;
+/* The drawn Thai street under the page top. Day colours come from the warm chart, night from the night-sky chart. */
+.skyline { display: block; width: 100%; height: clamp(132px, 15vw, 212px); margin-top: -28px;
+  --w1: #fbc9ae; --w2: #f9e5cc; --w3: #b2d0b5; --w4: #adccd1; --w5: #ffd283; --w6: #ffcccc;
+  --trim: #aa695b; --shutter: #d8b69b; --dark: #6c4a41; --tank: #6c909e; --ac: #fffbf5;
+  --a1: #f97940; --a2: #77c9c5; --s1: #e8755b; --s2: #6c909e; --s3: #9faf64; --signtext: #fffbf5;
+  --win: #fffbf5; --win-off: #fffbf5; --orb: #ffd283; --star: transparent; --cloud: #fffbf5; --bite: transparent;
+  --gold: #eaaf3e; --concrete: #d8b69b; --train: #6c909e; --stripe: #e8755b;
+  --pole: #8a5a4c; --wire: #8a5a4c; --cart: #e8755b; --truck: #e8755b; --tuk: #6c909e;
+  --kerb-a: #e8755b; --kerb-b: #fffbf5; --string: #aa695b;
   --f1: #f97940; --f2: #77c9c5; --f3: #ffdb7b; --f4: #e8755b; }
-.sk-wall.w1 { fill: var(--w1); } .sk-wall.w2 { fill: var(--w2); } .sk-wall.w3 { fill: var(--w3); } .sk-wall.w4 { fill: var(--w4); }
-.sk-roof.r1 { fill: var(--r1); } .sk-roof.r2 { fill: var(--r2); } .sk-roof.r3 { fill: var(--r3); }
+.sk-wall.w1 { fill: var(--w1); } .sk-wall.w2 { fill: var(--w2); } .sk-wall.w3 { fill: var(--w3); } .sk-wall.w4 { fill: var(--w4); } .sk-wall.w5 { fill: var(--w5); } .sk-wall.w6 { fill: var(--w6); }
+.sk-trim { fill: var(--trim); } .sk-trim.thin { opacity: 0.45; } .sk-shutter { fill: var(--shutter); } .sk-dark { fill: var(--dark); } .sk-tank { fill: var(--tank); } .sk-ac { fill: var(--ac); }
+.sk-awn.a1 { fill: var(--a1); } .sk-awn.a2 { fill: var(--a2); }
+.sk-sign.s1 { fill: var(--s1); } .sk-sign.s2 { fill: var(--s2); } .sk-sign.s3 { fill: var(--s3); }
+.sk-signtext { fill: var(--signtext); font-family: var(--body); font-size: 8.5px; font-weight: 600; }
 .sk-win { fill: var(--win); } .sk-win.off { fill: var(--win-off); }
-.sk-orb { fill: var(--orb); } .sk-orb-bite { fill: none; } .sk-star { fill: var(--star); } .sk-cloud { fill: var(--cloud); opacity: 0.85; }
-.sk-rail { fill: var(--rail); } .sk-train { fill: var(--train); }
-.sk-string { fill: none; stroke: var(--string); stroke-width: 1.2; }
+.sk-rail-line { fill: none; stroke: var(--trim); stroke-width: 1; stroke-dasharray: 1.5 2; }
+.sk-orb { fill: var(--orb); } .sk-orb-bite { fill: var(--bite); } .sk-star { fill: var(--star); } .sk-cloud { fill: var(--cloud); opacity: 0.85; }
+.sk-gold { fill: var(--gold); } .sk-concrete { fill: var(--concrete); } .sk-train { fill: var(--train); } .sk-stripe { fill: var(--stripe); }
+.sk-pole { fill: var(--pole); } .sk-wire { fill: none; stroke: var(--wire); stroke-width: 0.9; }
+.sk-cart { fill: var(--cart); } .sk-truck { fill: var(--truck); } .sk-tuk { fill: var(--tuk); }
+.sk-kerb { fill: var(--kerb-a); } .sk-kerb.b { fill: var(--kerb-b); }
+.sk-string { fill: none; stroke: var(--string); stroke-width: 1; }
 .sk-flag.f1 { fill: var(--f1); } .sk-flag.f2 { fill: var(--f2); } .sk-flag.f3 { fill: var(--f3); } .sk-flag.f4 { fill: var(--f4); }
 .sk-ground { fill: var(--bg); }
 @media (prefers-color-scheme: dark) {
   .skyline {
-    --w1: #22509c; --w2: #2b5284; --w3: #6755a0; --w4: #5b4885;
-    --r1: #0c3782; --r2: #1e0f74; --r3: #4f619b;
-    --win: #ffe88b; --win-off: #0b275d; --orb: #f3f1cb; --star: #ffe88b; --cloud: transparent;
-    --rail: #4f619b; --train: #88a5df; --string: #adc6e5;
+    --w1: #22509c; --w2: #2b5284; --w3: #6755a0; --w4: #5b4885; --w5: #4f619b; --w6: #0c3782;
+    --trim: #0b275d; --shutter: #1e0f74; --dark: #0b1f4d; --tank: #88aaca; --ac: #adc6e5;
+    --a1: #e992c5; --a2: #bf8be1; --s1: #e992c5; --s2: #3785d8; --s3: #bf8be1; --signtext: #0b275d;
+    --win: #ffe88b; --win-off: #0b275d; --orb: #f3f1cb; --star: #ffe88b; --cloud: transparent; --bite: #1c2a80;
+    --gold: #dea924; --concrete: #4f619b; --train: #bdd8ea; --stripe: #e992c5;
+    --pole: #0b1f4d; --wire: #88a5df; --cart: #e992c5; --truck: #3785d8; --tuk: #bf8be1;
+    --kerb-a: #e992c5; --kerb-b: #f3f1cb; --string: #adc6e5;
     --f1: #e992c5; --f2: #bf8be1; --f3: #ffc200; --f4: #88a5df; }
-  /* A second circle the colour of the sky turns the full circle into a crescent moon. */
-  .sk-orb-bite { fill: #1c2a80; }
 }
 .heroin { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: center; padding-block: 28px 44px; }
 .eyebrow { font-family: var(--display); letter-spacing: 0.14em; font-size: 0.9rem; color: var(--accent-ink); }
