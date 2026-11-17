@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { setLang, signOutNow } from "@/app/actions";
+import { aboutText } from "@/lib/about";
 import { getContext } from "@/lib/session";
 import NavTabs from "./NavTabs";
 
@@ -9,7 +10,7 @@ export default async function Header() {
     <header className="top">
       <div className="wrap topin">
         <Link className="brand" href="/">THAILAND <b>2600</b></Link>
-        <NavTabs problems={t.tabProblems} visuals={t.tabVisuals} />
+        <NavTabs problems={t.tabProblems} visuals={t.tabVisuals} about={aboutText(lang).tab} />
         <span className="grow" />
         <form action={setLang}>
           <input type="hidden" name="lang" value={lang === "th" ? "en" : "th"} />
