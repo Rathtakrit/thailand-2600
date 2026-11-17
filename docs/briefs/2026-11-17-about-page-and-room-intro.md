@@ -19,6 +19,8 @@ Thailand in 2600.
 | About page look | Its own pink and mint colours, day and night, with a drawn Thai pavilion, lotus flowers, arch-shaped goal cards, and butterflies and glitter that follow the pointer. The rest of the site keeps the colour charts | Owner's reference pictures, 2026-11-17 |
 | Contact footer | Stays on the About page only. Drawn as the back of an envelope with a flap and a seal. Pincassociation's button has a baby-blue cake, Rathtakrit's a green kiwi | Owner's words |
 | Feedback button | Shown now with a "coming soon" note; where it leads is decided later (project email, GitHub, or a form on the site) | No project email yet |
+| Home intro | The room is the opening screen of the home page. The TV is the way in: a tap zooms into the screen and moves down to the headline, map and problems. The wall calendar shows this year, the TV shows 2600 | Owner's words, 2026-11-17 |
+| Footer on every page | Dropped: the contact footer stays on the About page only | Owner's words, 2026-11-17 |
 
 Small technical picks (Claude's): the About text lives in `lib/about.ts`; no new packages; motion stops for
 visitors who ask for reduced motion.

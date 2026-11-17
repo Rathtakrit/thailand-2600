@@ -130,6 +130,78 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .stats dt { order: 2; font-size: 0.8rem; color: var(--muted); }
 .stats dd { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .mapbox { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; justify-content: center; }
+/* Home intro picture: a living room of today, the TV shows Thailand in 2600 */
+.intro { position: relative; height: min(86svh, 860px, 118vw); min-height: 380px; overflow: hidden; background: var(--bg); }
+.introhook { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); margin: 0; width: max-content; max-width: calc(100% - 32px); text-align: center; padding: 8px 18px; border-radius: 999px; background: color-mix(in srgb, var(--surface) 88%, transparent); color: var(--ink); font-family: var(--display); font-weight: 600; font-size: clamp(0.95rem, 2.2vw, 1.25rem); }
+/* In the room the pointer is a remote control. Glitter on the TV is the sign that it can be clicked. */
+.intro, .rm-tvlink { cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2244%22 viewBox=%220 0 26 44%22%3E%3Crect x=%222%22 y=%221.5%22 width=%2222%22 height=%2241%22 rx=%227%22 fill=%22%232a2422%22 stroke=%22%23ffffff%22 stroke-width=%222%22/%3E%3Ccircle cx=%2213%22 cy=%229%22 r=%223.2%22 fill=%22%23ff4d5e%22/%3E%3Ccircle cx=%228.5%22 cy=%2218%22 r=%222%22 fill=%22%23ffd283%22/%3E%3Ccircle cx=%2217.5%22 cy=%2218%22 r=%222%22 fill=%22%23ffd283%22/%3E%3Ccircle cx=%228.5%22 cy=%2225%22 r=%222%22 fill=%22%23f6efe4%22/%3E%3Ccircle cx=%2217.5%22 cy=%2225%22 r=%222%22 fill=%22%23f6efe4%22/%3E%3Crect x=%227%22 y=%2231%22 width=%2212%22 height=%226%22 rx=%223%22 fill=%22%2377c9c5%22/%3E%3C/svg%3E") 13 2, pointer; }
+.rm-tvlink { outline: none; }
+.rm-glitter { opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.rm-tvlink:hover .rm-glitter, .rm-tvlink:focus-visible .rm-glitter { opacity: 1; }
+@media (hover: none) { .rm-glitter { opacity: 1; } }
+.rm-spark { fill: #ffe88b; animation: rm-twinkle 1.4s ease-in-out infinite; } .rm-spark.b { fill: #ffffff; animation-delay: -0.45s; } .rm-spark.c { fill: #ff9cc0; animation-delay: -0.9s; }
+@keyframes rm-twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
+.room.zoom { transform: scale(4.2); transition: transform 0.75s cubic-bezier(0.6, 0, 0.9, 0.4); }
+.room { width: 100%; height: 100%; display: block; transform-origin: 50% 42%;
+  --wall: #fbe3c6; --floor: #dcae7c; --plank: #c79462; --skirt: #f6efe4; --frame: #f6efe4; --today: #cfd6d8; --block: #aab3b8; --rwire: #7c8589;
+  --curtain: #f4a37a; --rod: #a8683e; --paper: #fffaf0; --cal: #d8412f; --wood: #b9783f; --wood2: #a3642f; --tv: #2a2422; --cooker: #fffaf0; --lid: #e9e2d6;
+  --fan: #6f9aa6; --fanring: #4d7783; --blade: #9fd0dc; --mat: #e8755b; --matline: #ffd283; --pillow: #3f7480; --cat: #f2a04a; --flop: #3f7480; --pot: #c06a45; --leafy: #6fa45a; --glow-on: 0.35; }
+@media (prefers-color-scheme: dark) {
+  .room { --wall: #17306c; --floor: #10214f; --plank: #0b1a40; --skirt: #2b4a8c; --frame: #2b4a8c; --today: #0c1c47; --block: #071233; --rwire: #3b5fa8;
+    --curtain: #6755a0; --rod: #0b1a40; --paper: #c9d6ee; --cal: #e992c5; --wood: #2a3f7d; --wood2: #1d2f66; --tv: #050a1c; --cooker: #c9d6ee; --lid: #9fb3d9;
+    --fan: #3b5fa8; --fanring: #88a5df; --blade: #5f84cc; --mat: #6755a0; --matline: #e992c5; --pillow: #3785d8; --cat: #d99a5a; --reed: #adc6e5; --flop: #e992c5; --pot: #5b4885; --leafy: #2f7a66; --glow-on: 1; }
+}
+.rm-wall { fill: var(--wall); } .rm-floor { fill: var(--floor); } .rm-skirt, .rm-frame { fill: var(--frame); }
+.rm-plank { fill: none; stroke: var(--plank); stroke-width: 1.5; opacity: 0.6; }
+.rm-today { fill: var(--today); } .rm-block { fill: var(--block); } .rm-wire { fill: none; stroke: var(--rwire); stroke-width: 1.2; }
+.rm-curtain { fill: var(--curtain); } .rm-rod { fill: var(--rod); } .rm-paper { fill: var(--paper); }
+.rm-hand { fill: none; stroke: #4a2f28; stroke-width: 2.5; stroke-linecap: round; }
+.rm-tick { stroke: var(--cal); stroke-width: 1.5; transform-origin: 330px 62px; animation: rm-turn 60s steps(60) infinite; }
+.rm-cal { fill: var(--cal); } .rm-caltop { fill: #ffffff; font-family: var(--display); font-weight: 700; font-size: 17px; }
+.rm-calline { fill: none; stroke: #c9bfb0; stroke-width: 3; stroke-linecap: round; }
+.rm-glow { opacity: var(--glow-on); animation: rm-pulse 4s ease-in-out infinite; }
+.rm-wood { fill: var(--wood); } .rm-wood2 { fill: var(--wood2); } .rm-knob { fill: var(--matline); } .rm-tv { fill: var(--tv); }
+.rm-sun { fill: #ffd34d; transform-origin: 196px 30px; animation: rm-beat 5s ease-in-out infinite; }
+.rm-cloud { fill: #ffffff; opacity: 0.9; } .rm-cloud.c1 { animation: rm-drift 26s linear infinite; } .rm-cloud.c2 { animation: rm-drift 38s linear -14s infinite; }
+.rm-tower.a { fill: #5fc7c0; } .rm-tower.b { fill: #f59a7a; } .rm-tower.c { fill: #8fb6f2; }
+.rm-green { fill: #4fb866; } .rm-park { fill: #86d38a; } .rm-gold { fill: #f4c542; }
+.rm-lit { fill: #fff6c2; animation: rm-blink 3.6s ease-in-out infinite; } .rm-lit.l1 { animation-delay: -1.2s; } .rm-lit.l2 { animation-delay: -2.4s; }
+.rm-mast { fill: none; stroke: #ffffff; stroke-width: 2; }
+.rm-spin { fill: none; stroke: #ffffff; stroke-width: 2.4; stroke-linecap: round; animation: rm-turn 3.2s linear infinite; }
+.rm-spin.t1 { transform-origin: 226px 64px; } .rm-spin.t2 { transform-origin: 206px 78px; animation-duration: 2.4s; }
+.rm-rail { fill: none; stroke: #f3f6fb; stroke-width: 2.5; }
+.rm-train { fill: #ff6f91; animation: rm-train 7s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.rm-trainwin { fill: none; stroke: #ffffff; stroke-width: 3; stroke-linecap: round; }
+.rm-taxi { fill: #ffffff; stroke: #ffffff; stroke-width: 1.4; stroke-linecap: round; } .rm-taxi.x1 { animation: rm-fly 11s linear infinite; } .rm-taxi.x2 { animation: rm-flyback 15s linear -6s infinite; }
+.rm-kite { fill: #ff6f91; animation: rm-bob 3.4s ease-in-out infinite; } .rm-kite.k2 { fill: #ffd34d; animation-delay: -1.5s; }
+.rm-kitestring { fill: none; stroke: #ffffff; stroke-width: 0.8; }
+.rm-water { fill: #3fb7d6; } .rm-ripple { fill: none; stroke: #c6f1fb; stroke-width: 1.4; stroke-linecap: round; animation: rm-ripple 3s ease-in-out infinite; }
+.rm-boat { fill: #ffd34d; animation: rm-boat 16s linear infinite; } .rm-boatroof { fill: #ff6f91; }
+.rm-bug { fill: rgba(20, 30, 60, 0.55); } .rm-bugtext { fill: #ffffff; font-family: var(--display); font-weight: 700; font-size: 11px; }
+.rm-live { fill: #ff4d5e; animation: rm-blink 1.6s ease-in-out infinite; }
+.rm-shine { fill: #ffffff; opacity: 0.16; transform: skewX(-18deg); animation: rm-shine 9s ease-in-out infinite; }
+.rm-reed { fill: none; stroke: var(--reed, #a3642f); stroke-width: 2.2; stroke-linecap: round; } .rm-bottle { fill: var(--cooker); opacity: 0.85; } .rm-oil { fill: var(--matline); } .rm-bottleneck { fill: var(--lid); }
+.rm-fanbase { fill: var(--fan); } .rm-fancage { fill: var(--wall); opacity: 0.5; } .rm-fanring { fill: none; stroke: var(--fanring); stroke-width: 2.5; }
+.rm-blades { fill: var(--blade); transform-origin: 556px 262px; animation: rm-turn 0.9s linear infinite; }
+.rm-mat { fill: var(--mat); } .rm-matline { fill: none; stroke: var(--matline); stroke-width: 3; opacity: 0.8; }
+.rm-pillow { fill: var(--pillow); } .rm-pillow2 { fill: none; stroke: var(--matline); stroke-width: 2.5; }
+.rm-cat { fill: var(--cat); } .rm-tail { fill: none; stroke: var(--cat); stroke-width: 7; stroke-linecap: round; transform-origin: 352px 432px; animation: rm-wag 2.6s ease-in-out infinite; }
+.rm-flop { fill: var(--flop); } .rm-strap { fill: none; stroke: var(--paper); stroke-width: 2.5; stroke-linecap: round; }
+.rm-pot { fill: var(--pot); } .rm-leafy { fill: var(--leafy); }
+@keyframes rm-turn { to { transform: rotate(360deg); } }
+@keyframes rm-pulse { 0%, 100% { opacity: calc(var(--glow-on) * 0.75); } 50% { opacity: var(--glow-on); } }
+@keyframes rm-beat { 50% { transform: scale(1.12); } }
+@keyframes rm-drift { from { transform: translateX(-40px); } to { transform: translateX(280px); } }
+@keyframes rm-blink { 50% { opacity: 0.25; } }
+@keyframes rm-train { 0% { transform: translateX(-70px); } 45%, 55% { transform: translateX(90px); } 100% { transform: translateX(250px); } }
+@keyframes rm-fly { from { transform: translate(-20px, 6px); } to { transform: translate(260px, -10px); } }
+@keyframes rm-flyback { from { transform: translate(260px, 0); } to { transform: translate(-20px, 8px); } }
+@keyframes rm-bob { 50% { transform: translate(3px, -5px); } }
+@keyframes rm-ripple { 50% { transform: translateX(6px); opacity: 0.5; } }
+@keyframes rm-boat { from { transform: translateX(250px); } to { transform: translateX(-50px); } }
+@keyframes rm-shine { 0%, 70% { transform: translateX(0) skewX(-18deg); } 100% { transform: translateX(340px) skewX(-18deg); } }
+@keyframes rm-wag { 50% { transform: rotate(-18deg); } }
+@media (prefers-reduced-motion: reduce) { .room * { animation: none !important; } }
 /* The 3D province map. Block colours per region: day from the warm chart, night from the night-sky chart. */
 .map3dwrap { width: min(100%, 340px); }
 .map3d { position: relative; width: 100%; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center;
