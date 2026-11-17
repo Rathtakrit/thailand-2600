@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Room from "@/components/Room";
 import Skyline from "@/components/Skyline";
+import TvJump from "@/components/TvJump";
 import ThaiMap from "@/components/ThaiMap";
 import { CATS, CRITERIA, label, REGIONS } from "@/lib/content";
 import { homeStats, listProblems } from "@/lib/queries";
@@ -28,7 +30,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
 
   return (
     <>
-      <div className="hero">
+      <section className="intro">
+        <Room year={beYear} label={t.roomAlt} tvLabel={t.tvLabel} />
+        <p className="introhook">{t.introHook.replace("{year}", String(beYear))}</p>
+        <TvJump />
+      </section>
+
+      <div className="hero" id="problems">
         <div className="wrap heroin">
           <div>
             <p className="eyebrow">{lang === "th" ? `พ.ศ. ${thaiDigits(beYear)} → ${thaiDigits(2600)}` : `B.E. ${beYear} → 2600 · พ.ศ. ${thaiDigits(2600)}`}</p>

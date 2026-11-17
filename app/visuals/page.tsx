@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ModelView from "@/components/ModelView";
 import { listVisuals } from "@/lib/queries";
 import { getContext } from "@/lib/session";
 
@@ -21,7 +22,7 @@ export default async function Visuals() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={`/files/${s.imageId}`} alt={`${t.picAlt} ${s.title}`} loading="lazy" />
               ) : (
-                <span className="shotmodel">{t.visModelOnly}</span>
+                <ModelView preview src={`/files/${s.modelId}`} alt={`${t.modelAlt} ${s.title}`} loading={t.modelLoading} />
               )}
               <h2>{s.title}</h2>
               <p className="small muted">{t.forProblem}: {s.problemTitle}</p>
