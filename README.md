@@ -29,7 +29,7 @@ For local testing, `<site>` is `http://localhost:3000`.
 
 ## AI judge and translation
 
-Set `ANTHROPIC_API_KEY` in `.env.local` (create a key at console.anthropic.com) and restart. Without it the site still works, but pitches stay unscored and the translate links are hidden.
+Set `TOKENME_API_KEY` in `.env.local` and restart. Without it the site still works, but pitches stay unscored and the translate links are hidden.
 
 - A new pitch is judged on the server right after it is posted; the page shows "reading" until the verdict lands.
 - The final score counts the AI judge as three votes and each person's review as one (`lib/scoring.ts`).
