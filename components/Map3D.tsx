@@ -202,7 +202,7 @@ export default function Map3D({ counts, selected, thai, regionNames, hrefs, labe
   const prov = picked === null ? null : PROVINCES[picked];
   return (
     <div className="map3dwrap">
-      <div className="map3d" ref={box} role="img" aria-label={labels.aria}>
+      <div className="map3d" ref={box} role={ready ? "img" : undefined} aria-label={ready ? labels.aria : undefined}>
         {ready ? null : children}
       </div>
       <p className="mapnote small" aria-live="polite">

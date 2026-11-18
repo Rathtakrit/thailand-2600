@@ -48,6 +48,7 @@ export const label = (list: [string, string, string][], key: string, lang: Lang)
 };
 
 const en = {
+  sortLabel: "Sort", sectionsLabel: "Sections",
   tabProblems: "Problems", propose: "Name a problem", signIn: "Sign in", signOut: "Sign out", howBtn: "How judging works",
   h1: "What should Thailand be like in 2600?",
   lede: "Name a problem you see. Pitch a way to fix it. Every pitch is judged in the open on six criteria, first by an AI judge, then by people.",
@@ -96,6 +97,7 @@ const en = {
 };
 
 const th: typeof en = {
+  sortLabel: "เรียงตาม", sectionsLabel: "ส่วนต่าง ๆ ของเว็บไซต์",
   tabProblems: "ปัญหา", propose: "เสนอปัญหา", signIn: "เข้าสู่ระบบ", signOut: "ออกจากระบบ", howBtn: "ตัดสินกันอย่างไร",
   h1: "ประเทศไทยปี 2600 ควรเป็นอย่างไร",
   lede: "เห็นปัญหาอะไร บอกได้เลย ใครมีทางแก้ เสนอได้ทันที ทุกข้อเสนอถูกตัดสินอย่างเปิดเผยด้วยเกณฑ์ 6 ข้อ เริ่มจากกรรมการ AI แล้วให้ทุกคนช่วยปรับคะแนน",
