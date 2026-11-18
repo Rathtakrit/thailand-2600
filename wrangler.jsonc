@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "thailand-2600",
+  "compatibility_date": "2026-11-17",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      // Self-reference service binding: the service name must match the worker name.
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "thailand-2600"
+    }
+  ],
+  "r2_buckets": [
+    {
+      // Incremental cache for Next.js (open-next.config.ts). Created automatically
+      // on deploy; locally wrangler creates a throwaway bucket.
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "thailand-2600-opennext-cache"
+    }
+  ],
+  "images": {
+    // Enables image optimization (opennext.js.org/cloudflare/howtos/image)
+    "binding": "IMAGES"
+  }
+}
