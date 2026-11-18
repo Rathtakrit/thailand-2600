@@ -11,8 +11,8 @@ decide; the AI plans, explains, builds and checks. Claude Code is the main tool.
 ## Known so far
 - One of us has a Claude artifact (a page made on claude.ai) to use as the starting design. Ask for it to be pasted
   or exported into the repo; don't rebuild it from scratch.
-- Now: runs on each person's own computer, with a local preview opened in the browser.
-- Later: hosted on Cloudflare. Note in the brief where a choice makes that move easy or hard.
+- Runs on each person's computer (`npm run dev`) and on Cloudflare (see Preview). Hosting setup and its reasons:
+  `docs/briefs/2026-11-cloudflare-previews.md`.
 
 ## Talking
 - Plain words, short. Explain any technical word in one line the first time it comes up in a session.
@@ -44,8 +44,18 @@ decide; the AI plans, explains, builds and checks. Claude Code is the main tool.
 | `/retro` | End of a big session: suggest small rule updates. |
 
 ## Preview
-When there's something to see, start the dev server and give the full address (e.g. `http://localhost:3000`) on its
-own line, plus how to stop it.
+- **Local:** when there's something to see, start the dev server and give the full address (e.g.
+  `http://localhost:3000`) on its own line, plus how to stop it.
+- **Online:** every push to a branch other than `main` builds a preview at
+  `https://<branch>-thailand-2600.rathtakrit.workers.dev` in about 3 minutes. Merging into `main` updates the live
+  site, `https://thailand2600.rathtakrit.com`. The exact preview link is in the "Workers Builds" check on the PR
+  (open its details); use that one if the branch name has capitals or symbols.
+- Both ask for an email code first (Cloudflare Access): only the two of us can open them, and the code lasts 24 hours.
+  Test on a phone too.
+- **Every PR starts with its test link**, as the first line of the description:
+  `**Test link:** https://<branch>-thailand-2600.rathtakrit.workers.dev`. Before calling a PR ready, check that
+  the "Workers Builds" check passed and the page works at that link.
+- Previews and the live site share one database and one upload store, so everything in them is test data.
 
 ## Never
 - Commit secrets: keys, tokens, passwords or `.env` files. This repo is public: every file and commit can be read

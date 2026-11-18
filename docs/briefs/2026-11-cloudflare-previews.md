@@ -12,25 +12,26 @@ framework converted for Workers.
 **Domain for now:** thailand2600.rathtakrit.com, the project owner's domain. The real domain is chosen
 and bought later by Pincassociation, then pointed at the same Workers address.
 
-**Still to do, in order:**
-1. [x] A hosted Postgres instead of PGlite (`lib/db`): with `DATABASE_URL` set, `getDb()` makes a new client
-   per request (`maxUses: 1`, no global pool), as the OpenNext database howto says
-   (opennext.js.org/cloudflare/howtos/db). With no `DATABASE_URL` it is the same PGlite in `.data` as before.
-2. [x] R2 (Cloudflare file storage) instead of the local upload folder (`lib/storage.ts`): with `STORAGE=r2`
-   (a var in `wrangler.jsonc`) uploads go to the `UPLOADS` binding, bucket `thailand-2600-uploads`. That bucket
-   has to exist before the first deploy: `wrangler r2 bucket create thailand-2600-uploads`. The same key guard
-   applies. `preview_urls` is on, so previews get a public address.
-3. Allowed sign-in redirect addresses for the preview links, otherwise sign-in rejects the preview hosts.
-4. The first build test on Workers.
+**How it runs (set up 18 Nov):**
+| Part | What |
+|---|---|
+| Builds | Cloudflare Workers Builds, connected to this repo. `main` → `npx opennextjs-cloudflare build` + `deploy` → live site. Every other branch (trigger "Branch previews") → `build` + `upload` → `https://<branch>-thailand-2600.rathtakrit.workers.dev`. |
+| Who can open it | Cloudflare Access on the live site and all preview links: allow-list of two emails, one-time code by email, 24-hour session. The emails live only in the Cloudflare dashboard, never in this repo. |
+| Database | Supabase (hosted Postgres, Singapore), reached through `DATABASE_URL` (transaction pooler). With it set, `getDb()` makes a new client per request (`maxUses: 1`), as [OpenNext's database guide](https://opennext.js.org/cloudflare/howtos/db) requires. Without it, local PGlite in `.data` as before. Tables come from `drizzle/`. Row-level security is on with no rules, so Supabase's public data API can't read them; the app connects as the owner. |
+| Uploads | R2 bucket `thailand-2600-uploads` (binding `UPLOADS`, picked by `STORAGE=r2` in `wrangler.jsonc`). Page cache: R2 bucket `thailand-2600-opennext-cache`. |
+| Secrets | Set on the Worker in the dashboard: `DATABASE_URL`, `AUTH_SECRET`, `TOKENME_API_KEY`. Previews use the same ones. |
+| Size | 2.0 MB compressed (free-plan limit 3 MB), even with the unused PGlite engine inside: no supported way to leave it out was found. |
 
-**Not done: PGlite in the Cloudflare build.** PGlite (~15 MB of `.wasm`/`.data`) is still copied into
-`.open-next/server-functions/default/node_modules/@electric-sql/pglite`, where it is never used because
-`DATABASE_URL` is always set there. No supported way to leave it out was found in the local docs
-(`@opennextjs/cloudflare` README, dist and templates, and `node_modules/next/dist/docs`):
-`serverExternalPackages` only stops Next bundling a package, which is exactly why it is copied whole, and the
-adapter config has no exclude option. Watch the Workers script size limit at item 4.
+**Why not Cloudflare's newer "Previews":** each Preview needs its own secrets and storage listed in `wrangler.jsonc`
+(`previews` block), so it was turned off in favour of OpenNext's documented `upload` route, which reuses the live
+site's settings.
 
-**Not checked:** that OpenNext supports Next 16.4.6 with `cacheComponents` on; the first `cf:build` will show.
+**Known limits:**
+- Previews and the live site share one database and one upload store: fine for testing; give previews their own
+  database before real visitors come.
+- The hosted database starts empty (local PGlite adds example problems; hosted doesn't).
+- Google/LINE sign-in on preview links needs each address on the provider's allowed list; not set up.
+- A new database change: run `npm run db:migrate` with `DATABASE_URL` pointing at Supabase.
 
 **Commands:** `cf:build` builds for Cloudflare, `cf:preview` shows the built site in the local Workers
 runtime, `cf:deploy` publishes it. `dev`, `build` and `start` are unchanged.
