@@ -13,8 +13,10 @@ export async function POST(request: Request) {
   const [user] = await (await getDb()).select({ id: schema.users.id }).from(schema.users).where(eq(schema.users.id, userId));
   if (!user) return Response.json({ error: "signed_out" }, { status: 401 });
 
-  // Refuse oversized uploads before reading them into memory.
-  if (Number(request.headers.get("content-length") ?? 0) > LIMITS.model + 64 * 1024) return Response.json({ error: "too_big" }, { status: 413 });
+  // Require a known size before reading uploads into memory.
+  const size = Number(request.headers.get("content-length"));
+  if (!Number.isFinite(size) || size <= 0) return Response.json({ error: "too_big" }, { status: 411 });
+  if (size > LIMITS.model + 64 * 1024) return Response.json({ error: "too_big" }, { status: 413 });
 
   const file = (await request.formData().catch(() => null))?.get("file");
   if (!(file instanceof File) || file.size === 0) return Response.json({ error: "bad_type" }, { status: 415 });
