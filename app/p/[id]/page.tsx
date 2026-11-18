@@ -5,6 +5,7 @@ import ModelView from "@/components/ModelView";
 import PitchForm from "@/components/PitchForm";
 import ScrollToHash from "@/components/ScrollToHash";
 import Radar from "@/components/Radar";
+import SubmitButton from "@/components/SubmitButton";
 import { aiEnabled } from "@/lib/ai";
 import { CATS, CRITERIA, label, REGIONS, type Dict, type Lang } from "@/lib/content";
 import { getProblem } from "@/lib/queries";
@@ -112,7 +113,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
               {isAuthor && ai && (status === "none" || status === "failed") ? (
                 <form action={askJudge}>
                   <input type="hidden" name="solutionId" value={s.id} />
-                  <button className="btn" type="submit">{t.askAi}</button>
+                  <SubmitButton className="btn">{t.askAi}</SubmitButton>
                 </form>
               ) : null}
             </div>
@@ -188,7 +189,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
                         </label>
                       ))}
                     </div>
-                    <div><button className="btn primary" type="submit">{t.saveScores}</button></div>
+                    <div><SubmitButton className="btn primary">{t.saveScores}</SubmitButton></div>
                   </form>
                 </details>
               ) : null}
@@ -209,7 +210,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
                   <form className="cform" action={addComment}>
                     <input type="hidden" name="solutionId" value={s.id} />
                     <input type="text" name="body" maxLength={600} required aria-label={t.cPh} placeholder={t.cPh} />
-                    <button className="btn" type="submit">{t.cSend}</button>
+                    <SubmitButton className="btn">{t.cSend}</SubmitButton>
                   </form>
                 ) : null}
               </div>
@@ -224,7 +225,7 @@ export default async function ProblemPage({ params, searchParams }: { params: Pr
           <PitchForm problemId={p.id} t={t} />
         </details>
       ) : (
-        <p className="notice" style={{ marginTop: 28 }}>{t.needSignIn} <Link href="/signin">{t.signIn}</Link></p>
+        <p className="notice" style={{ marginTop: 28 }}>{t.needSignIn} <Link href={`/signin?next=${encodeURIComponent(`/p/${p.id}`)}`}>{t.signIn}</Link></p>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { aiEnabled, judgePitch } from "./ai";
 import { CATS, label, REGIONS } from "./content";
 import { getDb, schema } from "./db";
 
-const { solutions, problems, aiCalls } = schema;
+const { solutions, problems, aiCalls, translations } = schema;
 
 const LIMITS = {
   judge: Number(process.env.JUDGE_DAILY_LIMIT) || 5,
@@ -36,7 +36,11 @@ export async function runJudge(solutionId: string): Promise<void> {
       pitchTitle: row.title, pitchBody: row.body,
     });
     if (result.status === "refused") await db.update(solutions).set({ aiStatus: "refused", aiAt: new Date() }).where(eq(solutions.id, solutionId));
-    else await db.update(solutions).set({ aiStatus: "done", ai: result.verdict, aiAt: new Date() }).where(eq(solutions.id, solutionId));
+    else {
+      await db.update(solutions).set({ aiStatus: "done", ai: result.verdict, aiAt: new Date() }).where(eq(solutions.id, solutionId));
+      // A translation made before the verdict must include it next time.
+      await db.delete(translations).where(and(eq(translations.kind, "solution"), eq(translations.refId, solutionId)));
+    }
   } catch (err) {
     console.error("AI judge failed for", solutionId, err);
     await db.update(solutions).set({ aiStatus: "failed", aiAt: new Date() }).where(eq(solutions.id, solutionId)).catch(() => {});

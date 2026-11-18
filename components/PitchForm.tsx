@@ -5,6 +5,7 @@ import { createSolution } from "@/app/actions";
 import type { Dict } from "@/lib/content";
 import DrawPad, { type DrawLabels } from "./DrawPad";
 import ModelView from "./ModelView";
+import SubmitButton from "./SubmitButton";
 
 type Labels = Pick<Dict, "dsHint" | "dsName" | "dsBody" | "dsSubmit" | "picLabel" | "picHint" | "picChoose" | "picChange" | "picRemove" | "picUploading" | "picErrType" | "picErrBig" | "picErrLimit" | "picErrFail" | "drawBtn" | "drawOn" | "modelLabel" | "modelHint" | "modelChoose" | "modelChange" | "modelRemove" | "modelErrType" | "modelErrBig" | "modelRotate" | "modelLoading"> & DrawLabels;
 
@@ -149,7 +150,7 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
         {modelError ? <p className="err" role="alert">{modelError}</p> : null}
       </div>
 
-      <div><button className="btn primary" type="submit" disabled={busy || drawing || modelBusy}>{t.dsSubmit}</button></div>
+      <div><SubmitButton className="btn primary" disabled={busy || drawing || modelBusy}>{t.dsSubmit}</SubmitButton></div>
     </form>
   );
 }

@@ -13,7 +13,7 @@ export default async function Moderate() {
         <div className="pagehead">
           <h1>{t.modHead}</h1>
           <p className="muted">{t.modNot}</p>
-          {userId ? <p className="small">{t.modYourId} <code>{userId}</code>. {t.modHow}</p> : <p className="small"><Link href="/signin">{t.signIn}</Link></p>}
+          {userId ? <p className="small">{t.modYourId} <code>{userId}</code>. {t.modHow}</p> : <p className="small"><Link href="/signin?next=%2Fmoderate">{t.signIn}</Link></p>}
         </div>
       </div>
     );
