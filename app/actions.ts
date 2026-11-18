@@ -177,6 +177,8 @@ export async function toggleLike(form: FormData) {
   const userId = await requireUser(() => actionPath(form));
   const solutionId = text(form, "solutionId", 40);
   const db = await getDb();
+  const [s] = await db.select({ id: solutions.id }).from(solutions).where(eq(solutions.id, solutionId));
+  if (!s) return;
   const mine = and(eq(likes.userId, userId), eq(likes.solutionId, solutionId));
   const [had] = await db.select().from(likes).where(mine);
   if (had) await db.delete(likes).where(mine);
@@ -188,6 +190,8 @@ export async function toggleVote(form: FormData) {
   const userId = await requireUser(() => actionPath(form));
   const problemId = text(form, "problemId", 40);
   const db = await getDb();
+  const [p] = await db.select({ id: problems.id }).from(problems).where(eq(problems.id, problemId));
+  if (!p) return;
   const mine = and(eq(votes.userId, userId), eq(votes.problemId, problemId));
   const [had] = await db.select().from(votes).where(mine);
   if (had) await db.delete(votes).where(mine);
