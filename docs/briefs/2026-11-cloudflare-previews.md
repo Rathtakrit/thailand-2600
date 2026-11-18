@@ -13,10 +13,22 @@ framework converted for Workers.
 and bought later by Pincassociation, then pointed at the same Workers address.
 
 **Still to do, in order:**
-1. A hosted Postgres instead of PGlite (`lib/db`): the local embedded database does not work on Workers.
-2. R2 (Cloudflare file storage) instead of the local upload folder (`lib/storage.ts`).
+1. [x] A hosted Postgres instead of PGlite (`lib/db`): with `DATABASE_URL` set, `getDb()` makes a new client
+   per request (`maxUses: 1`, no global pool), as the OpenNext database howto says
+   (opennext.js.org/cloudflare/howtos/db). With no `DATABASE_URL` it is the same PGlite in `.data` as before.
+2. [x] R2 (Cloudflare file storage) instead of the local upload folder (`lib/storage.ts`): with `STORAGE=r2`
+   (a var in `wrangler.jsonc`) uploads go to the `UPLOADS` binding, bucket `thailand-2600-uploads`. That bucket
+   has to exist before the first deploy: `wrangler r2 bucket create thailand-2600-uploads`. The same key guard
+   applies. `preview_urls` is on, so previews get a public address.
 3. Allowed sign-in redirect addresses for the preview links, otherwise sign-in rejects the preview hosts.
 4. The first build test on Workers.
+
+**Not done: PGlite in the Cloudflare build.** PGlite (~15 MB of `.wasm`/`.data`) is still copied into
+`.open-next/server-functions/default/node_modules/@electric-sql/pglite`, where it is never used because
+`DATABASE_URL` is always set there. No supported way to leave it out was found in the local docs
+(`@opennextjs/cloudflare` README, dist and templates, and `node_modules/next/dist/docs`):
+`serverExternalPackages` only stops Next bundling a package, which is exactly why it is copied whole, and the
+adapter config has no exclude option. Watch the Workers script size limit at item 4.
 
 **Not checked:** that OpenNext supports Next 16.4.6 with `cacheComponents` on; the first `cf:build` will show.
 
