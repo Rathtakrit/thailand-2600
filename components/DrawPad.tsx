@@ -133,7 +133,7 @@ export default function DrawPad({ backgroundUrl, t, onDone, onCancel }: { backgr
         <button type="button" className="btn" disabled={count === 0} onClick={clear}>{t.drawClear}</button>
       </div>
       <div className="padwrap">
-      <canvas ref={canvas} className="padcanvas" width={W} height={H} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
+      <canvas ref={canvas} role="img" aria-label={t.drawHint} className="padcanvas" width={W} height={H} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} />
       </div>
       <div className="acts" style={{ marginTop: 0 }}>
         <button type="button" className="btn primary" disabled={count === 0 && !hasBackground} onClick={done}>{t.drawDone}</button>

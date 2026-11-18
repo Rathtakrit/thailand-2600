@@ -126,7 +126,7 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
             }}
           />
         ) : null}
-        <input ref={input} className="filepick" type="file" id="sPic" accept="image/png,image/jpeg,image/webp" onChange={(e) => choose(e.target.files?.[0])} />
+        <input ref={input} className="filepick" type="file" tabIndex={-1} id="sPic" accept="image/png,image/jpeg,image/webp" onChange={(e) => choose(e.target.files?.[0])} />
         {drawing ? null : (
           <div className="acts" style={{ marginTop: 0 }}>
             <button className="btn" type="button" disabled={busy} onClick={() => input.current?.click()}>{busy ? t.picUploading : pic ? t.picChange : t.picChoose}</button>
@@ -141,7 +141,7 @@ export default function PitchForm({ problemId, t }: { problemId: string; t: Labe
         <label htmlFor="sModel">{t.modelLabel}</label>
         <span className="muted small">{t.modelHint}</span>
         {model ? <ModelView src={model.url} alt="" hint={t.modelRotate} loading={t.modelLoading} /> : null}
-        <input ref={modelInput} className="filepick" type="file" id="sModel" accept=".glb,model/gltf-binary" onChange={(e) => chooseModel(e.target.files?.[0])} />
+        <input ref={modelInput} className="filepick" type="file" tabIndex={-1} id="sModel" accept=".glb,model/gltf-binary" onChange={(e) => chooseModel(e.target.files?.[0])} />
         <div className="acts" style={{ marginTop: 0 }}>
           <button className="btn" type="button" disabled={modelBusy} onClick={() => modelInput.current?.click()}>{modelBusy ? t.picUploading : model ? t.modelChange : t.modelChoose}</button>
           {model && !modelBusy ? <button className="link" type="button" onClick={() => setModel(null)}>{t.modelRemove}</button> : null}

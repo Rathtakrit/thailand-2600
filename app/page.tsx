@@ -67,7 +67,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               <option value="">{t.allCats}</option>
               {CATS.map(([k]) => <option key={k} value={k}>{label(CATS, k, lang)}</option>)}
             </select>
-            <select name="sort" defaultValue={sort} aria-label="Sort">
+            <select name="sort" defaultValue={sort} aria-label={t.sortLabel}>
               <option value="new">{t.sortNew}</option>
               <option value="seen">{t.sortSeen}</option>
               <option value="sol">{t.sortSol}</option>
