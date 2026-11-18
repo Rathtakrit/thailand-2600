@@ -44,7 +44,7 @@ decide; the AI plans, explains, builds and checks. Claude Code is the main tool.
 | `/retro` | End of a big session: suggest small rule updates. |
 
 ## Preview
-When there's something to see, start the dev server and give the full address (e.g. `http://localhost:5173`) on its
+When there's something to see, start the dev server and give the full address (e.g. `http://localhost:3000`) on its
 own line, plus how to stop it.
 
 ## Never
