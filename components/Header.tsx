@@ -4,6 +4,7 @@ import { aboutText } from "@/lib/about";
 import { getContext } from "@/lib/session";
 import NavTabs from "./NavTabs";
 import DocumentLang from "./DocumentLang";
+import { SignInLink } from "./SignInLink";
 
 export default async function Header() {
   const { lang, t, userId, userName, userImage, moderator } = await getContext();
@@ -29,7 +30,7 @@ export default async function Header() {
             <form action={signOutNow}><button className="btn ghost" type="submit">{t.signOut}</button></form>
           </>
         ) : (
-          <Link className="btn ghost" href="/signin">{t.signIn}</Link>
+          <SignInLink>{t.signIn}</SignInLink>
         )}
         <Link className="btn primary" href="/new">{t.propose}</Link>
       </div>

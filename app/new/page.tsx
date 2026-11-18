@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 import { createProblem } from "@/app/actions";
+import SubmitButton from "@/components/SubmitButton";
 import { CATS, label, REGIONS } from "@/lib/content";
 import { getContext } from "@/lib/session";
 
 export default async function NewProblem() {
   const { lang, t, userId } = await getContext();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/signin?next=%2Fnew");
   return (
     <div className="wrap page">
       <form className="form" action={createProblem}>
@@ -22,7 +23,7 @@ export default async function NewProblem() {
             <select id="pRegion" name="region">{REGIONS.map(([k]) => <option key={k} value={k}>{label(REGIONS, k, lang)}</option>)}</select>
           </div>
         </div>
-        <div><button className="btn primary" type="submit">{t.dpSubmit}</button></div>
+        <div><SubmitButton className="btn primary">{t.dpSubmit}</SubmitButton></div>
       </form>
     </div>
   );

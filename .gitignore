@@ -43,6 +43,10 @@ next-env.d.ts
 # local embedded database
 /.data
 
+# Cloudflare / OpenNext build output and local wrangler state
+/.open-next
+/.wrangler
+
 # keep the env template
 !.env.example
 

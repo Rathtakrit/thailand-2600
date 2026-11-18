@@ -1,0 +1,41 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "thailand-2600",
+  "compatibility_date": "2026-11-17",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    // Tells lib/storage.ts to keep uploads in R2 instead of the local .data/uploads folder.
+    "STORAGE": "r2"
+  },
+  "services": [
+    {
+      // Self-reference service binding: the service name must match the worker name.
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "thailand-2600"
+    }
+  ],
+  "r2_buckets": [
+    {
+      // Incremental cache for Next.js (open-next.config.ts). Created automatically
+      // on deploy; locally wrangler creates a throwaway bucket.
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "thailand-2600-opennext-cache"
+    },
+    {
+      // Uploaded files (lib/storage.ts). Create it before deploying.
+      "binding": "UPLOADS",
+      "bucket_name": "thailand-2600-uploads"
+    }
+  ],
+  "images": {
+    // Enables image optimization (opennext.js.org/cloudflare/howtos/image)
+    "binding": "IMAGES"
+  },
+  // Public preview addresses for preview deployments and `wrangler dev`.
+  "preview_urls": true
+}

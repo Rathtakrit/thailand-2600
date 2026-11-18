@@ -12,21 +12,40 @@ import { getDb, schema } from "@/lib/db";
 import { deleteUnusedUploads, deleteUploads } from "@/lib/files";
 import { runJudge, takeAiTurn } from "@/lib/judge";
 import { isModerator, removeVisual } from "@/lib/moderation";
+import { safeNext } from "@/lib/next-path";
 import { clampScore, CRIT_KEYS, type Scores } from "@/lib/scoring";
 
 const { problems, solutions, comments, likes, votes, reviews, translations, files, reports } = schema;
 
-async function requireUser(): Promise<string> {
+async function requireUser(next: string | (() => Promise<string>) = "/"): Promise<string> {
   const session = await auth();
   const id = session?.user?.id;
-  if (!id) redirect("/signin");
+  const query = async () => `next=${encodeURIComponent(safeNext(typeof next === "function" ? await next() : next))}`;
+  if (!id) redirect(`/signin?${await query()}`);
   // A session can outlive its account (deleted user, reset database): send those back to sign in.
   const [row] = await (await getDb()).select({ id: schema.users.id }).from(schema.users).where(eq(schema.users.id, id));
-  if (!row) redirect("/signin?stale=1");
+  if (!row) redirect(`/signin?stale=1&${await query()}`);
   return id;
 }
 const text = (form: FormData, key: string, max: number) => String(form.get(key) ?? "").trim().slice(0, max);
 const newId = (prefix: string) => prefix + crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+
+async function actionPath(form: FormData) {
+  const problemId = text(form, "problemId", 40);
+  if (problemId) return "/p/" + encodeURIComponent(problemId);
+  const kind = String(form.get("kind"));
+  const id = text(form, "id", 40);
+  if (kind === "problem" && id) return "/p/" + encodeURIComponent(id);
+  let solutionId = text(form, "solutionId", 40) || (kind === "solution" ? id : "");
+  const db = await getDb();
+  if (kind === "comment" && id) {
+    const [c] = await db.select({ solutionId: comments.solutionId }).from(comments).where(eq(comments.id, id));
+    solutionId = c?.solutionId ?? "";
+  }
+  if (!solutionId) return "/";
+  const [s] = await db.select({ problemId: solutions.problemId }).from(solutions).where(eq(solutions.id, solutionId));
+  return s ? "/p/" + encodeURIComponent(s.problemId) : "/";
+}
 
 export async function setLang(form: FormData) {
   (await cookies()).set("lang", form.get("lang") === "th" ? "th" : "en", { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
@@ -35,8 +54,9 @@ export async function setLang(form: FormData) {
 
 export async function signInWith(form: FormData) {
   const provider = String(form.get("provider"));
-  if (provider === "dev") await signIn("dev", { name: text(form, "name", 40), redirectTo: "/" });
-  else if (provider === "line" || provider === "google") await signIn(provider, { redirectTo: "/" });
+  const redirectTo = safeNext(String(form.get("next") ?? "/"));
+  if (provider === "dev") await signIn("dev", { name: text(form, "name", 40), redirectTo });
+  else if (provider === "line" || provider === "google") await signIn(provider, { redirectTo });
 }
 
 export async function signOutNow() {
@@ -44,7 +64,7 @@ export async function signOutNow() {
 }
 
 export async function createProblem(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser("/new");
   const title = text(form, "title", 160), body = text(form, "body", 3000);
   const cat = text(form, "cat", 20), region = text(form, "region", 20);
   if (title.length < 6 || body.length < 30 || !CATS.some((c) => c[0] === cat) || !REGIONS.some((r) => r[0] === region)) return;
@@ -54,7 +74,7 @@ export async function createProblem(form: FormData) {
 }
 
 export async function createSolution(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const problemId = text(form, "problemId", 40), title = text(form, "title", 160), body = text(form, "body", 4000);
   if (title.length < 6 || body.length < 60) return;
   const db = await getDb();
@@ -72,7 +92,7 @@ export async function createSolution(form: FormData) {
   const id = newId("s");
   // The verdict is written after the response is sent; the page shows "reading" until it lands.
   const judgeNow = aiEnabled() && (await takeAiTurn(userId, "judge"));
-  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, modelId, aiStatus: judgeNow ? "pending" : "none" });
+  await db.insert(solutions).values({ id, problemId, title, body, authorId: userId, imageId, modelId, aiStatus: judgeNow ? "pending" : "none", aiAt: judgeNow ? new Date() : null });
   if (judgeNow) after(() => runJudge(id));
   // Tidy up pictures and models that were uploaded but never posted.
   after(() => deleteUnusedUploads().catch((err) => console.error("Upload clean-up failed", err)));
@@ -81,7 +101,7 @@ export async function createSolution(form: FormData) {
 
 /** The author can ask for a verdict when a pitch has none (judge was off, failed, or the daily limit was hit). */
 export async function askJudge(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const id = text(form, "solutionId", 40);
   const db = await getDb();
   const [s] = await db.select().from(solutions).where(and(eq(solutions.id, id), eq(solutions.authorId, userId)));
@@ -95,7 +115,7 @@ export async function askJudge(form: FormData) {
 
 /** Saves this person's own six scores for a solution (one vote beside the AI judge). */
 export async function saveReview(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const solutionId = text(form, "solutionId", 40);
   const db = await getDb();
   const [s] = await db.select({ id: solutions.id }).from(solutions).where(eq(solutions.id, solutionId));
@@ -107,7 +127,7 @@ export async function saveReview(form: FormData) {
 
 /** Translates one problem, solution (with its verdict) or comment into the reader's language and saves it for everyone. */
 export async function translate(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const kind = String(form.get("kind")), id = text(form, "id", 40), problemId = text(form, "problemId", 40);
   const lang = (await cookies()).get("lang")?.value === "th" ? "th" : "en";
   const db = await getDb();
@@ -143,7 +163,7 @@ export async function translate(form: FormData) {
 }
 
 export async function addComment(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const solutionId = text(form, "solutionId", 40), body = text(form, "body", 600);
   if (!body) return;
   const db = await getDb();
@@ -154,7 +174,7 @@ export async function addComment(form: FormData) {
 }
 
 export async function toggleLike(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const solutionId = text(form, "solutionId", 40);
   const db = await getDb();
   const [s] = await db.select({ id: solutions.id }).from(solutions).where(eq(solutions.id, solutionId));
@@ -167,7 +187,7 @@ export async function toggleLike(form: FormData) {
 }
 
 export async function toggleVote(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const problemId = text(form, "problemId", 40);
   const db = await getDb();
   const [p] = await db.select({ id: problems.id }).from(problems).where(eq(problems.id, problemId));
@@ -184,7 +204,7 @@ export async function toggleVote(form: FormData) {
  * so nothing a person deleted can still be opened by its address.
  */
 export async function removeOwn(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const kind = String(form.get("kind")), id = text(form, "id", 40);
   const db = await getDb();
   if (kind === "problem") {
@@ -208,7 +228,7 @@ export async function removeOwn(form: FormData) {
 
 /** Any signed-in person can report a solution's picture or 3D model, once. */
 export async function reportVisual(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   const solutionId = text(form, "solutionId", 40);
   const db = await getDb();
   const [s] = await db.select({ imageId: solutions.imageId, modelId: solutions.modelId }).from(solutions).where(eq(solutions.id, solutionId));
@@ -219,7 +239,7 @@ export async function reportVisual(form: FormData) {
 
 /** Moderators only: remove a reported picture or model, or keep it and clear its reports. */
 export async function moderateVisual(form: FormData) {
-  const userId = await requireUser();
+  const userId = await requireUser(() => actionPath(form));
   if (!isModerator(userId)) return;
   const solutionId = text(form, "solutionId", 40), what = String(form.get("what"));
   if (what === "image" || what === "model") await removeVisual(solutionId, what);

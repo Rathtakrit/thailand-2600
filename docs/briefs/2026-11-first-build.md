@@ -10,7 +10,7 @@ options to be compared first. Treat each as open to change; the "Cloudflare" col
 | Sign-in | LINE and Google, via Auth.js | Almost everyone in Thailand has LINE; one tap, no passwords to store | Works; session cookies only |
 | Database | Postgres, via Drizzle | Standard, easy to host anywhere | Needs a hosted Postgres reached through Cloudflare Hyperdrive, or a rewrite of `lib/db` for Cloudflare D1 |
 | Local database | PGlite (Postgres inside the app, saved in `.data/`) | Runs on each person's computer with no setup | Local only; not used when hosted |
-| AI judge | Claude Opus 5.5 on the server, Claude Haiku 5.5 for translation | Scores cannot be changed from the browser; translation is cheap | Works; it is a plain web request |
+| AI judge | TokenMe (DeepSeek V4.1 Flash) on the server for the judge and translation, one plain `fetch`, key `TOKENME_API_KEY` (changed from Claude on 2026-11-18, Rathtakrit's choice, same method as his Ten Courts game) | Scores cannot be changed from the browser; TokenMe's usage log keeps no prompt text | Works; it is a plain web request |
 | Scoring | AI counts as 3 votes, each person as 1 | One person cannot swing a score alone | No effect |
 | Moderation | One person reviews, authors can remove their own posts | Smallest thing that works for a soft launch | No effect |
 

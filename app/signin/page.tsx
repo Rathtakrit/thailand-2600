@@ -2,12 +2,14 @@ import { redirect } from "next/navigation";
 import { signInWith } from "@/app/actions";
 import { hasDevSignIn, hasGoogle, hasLine } from "@/auth";
 import { getContext } from "@/lib/session";
+import { safeNext } from "@/lib/next-path";
 
 export default async function SignIn({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const { stale } = await searchParams;
+  const { stale, next } = await searchParams;
+  const returnTo = safeNext(typeof next === "string" ? next : "/");
   const { t, userId } = await getContext();
   // "stale" means the session points at an account that no longer exists, so let them sign in again.
-  if (userId && !stale) redirect("/");
+  if (userId && !stale) redirect(returnTo);
   return (
     <div className="wrap page">
       <div className="signin">
@@ -18,10 +20,12 @@ export default async function SignIn({ searchParams }: { searchParams: Promise<R
           <p>{t.siPrivacy}</p>
         </div>
         <form action={signInWith}>
+          <input type="hidden" name="next" value={returnTo} />
           <input type="hidden" name="provider" value="line" />
           <button className="btn line" type="submit" disabled={!hasLine}>{t.siLine}{hasLine ? "" : ` (${t.siNotSet})`}</button>
         </form>
         <form action={signInWith}>
+          <input type="hidden" name="next" value={returnTo} />
           <input type="hidden" name="provider" value="google" />
           <button className="btn" type="submit" disabled={!hasGoogle}>{t.siGoogle}{hasGoogle ? "" : ` (${t.siNotSet})`}</button>
         </form>
@@ -29,6 +33,7 @@ export default async function SignIn({ searchParams }: { searchParams: Promise<R
           <>
             <hr />
             <form className="form" action={signInWith}>
+              <input type="hidden" name="next" value={returnTo} />
               <input type="hidden" name="provider" value="dev" />
               <h2 style={{ fontSize: "1.05rem" }}>{t.siDev}</h2>
               <p className="muted small">{t.siDevHint}</p>
