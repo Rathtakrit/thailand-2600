@@ -2,7 +2,7 @@
 
 A public platform where people in Thailand name a problem, pitch the solution they believe would solve it by B.E. 2600, and have it judged in the open.
 
-Built so far: sign-in, problems, solutions, likes, comments, Thai/English, the AI judge with human score adjustment, on-demand translation, pictures, drawings and 3D models on pitches, the Visualized solutions gallery, reporting with a moderator page, a privacy notice, and the 3D map of 77 provinces.
+Built so far: sign-in, problems, solutions, likes, comments, Thai/English, the AI judge with human score adjustment, on-demand translation, pictures, drawings and 3D models on pitches, the Visualized solutions gallery, reporting with a moderator page, a privacy notice, the About page, the room intro on the home page, 3D previews on gallery cards and the 3D map of 77 provinces.
 
 **Working with Claude Code:** the team rules are in `AGENTS.md`, and the decisions made so far are in `docs/briefs/`.
 
@@ -13,6 +13,8 @@ npm run dev
 ```
 
 Then open http://localhost:3000. With no `DATABASE_URL` set, the app stores data in an embedded Postgres under `.data/` and seeds four example problems. Delete `.data/` to start fresh.
+
+`npm run check` runs the lint, the type check, the tests and the build.
 
 The sign-in page offers a "Local test account" (name only) in development. It is not available in production builds.
 
@@ -27,7 +29,7 @@ For local testing, `<site>` is `http://localhost:3000`.
 
 ## AI judge and translation
 
-Set `ANTHROPIC_API_KEY` in `.env.local` (create a key at console.anthropic.com) and restart. Without it the site still works, but pitches stay unscored and the translate links are hidden.
+Set `TOKENME_API_KEY` in `.env.local` and restart. Without it the site still works, but pitches stay unscored and the translate links are hidden.
 
 - A new pitch is judged on the server right after it is posted; the page shows "reading" until the verdict lands.
 - The final score counts the AI judge as three votes and each person's review as one (`lib/scoring.ts`).
