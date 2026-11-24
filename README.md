@@ -44,6 +44,8 @@ Set `DATABASE_URL` to a Postgres connection string, then:
 npm run db:migrate
 ```
 
+Cloudflare previews use `PREVIEW_DATABASE_URL` when set; run migrations against it the same way: `DATABASE_URL=<preview url> npm run db:migrate`.
+
 After changing `lib/db/schema.ts`, run `npm run db:generate` to create a new migration.
 
 ## Layout
