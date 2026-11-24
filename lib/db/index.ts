@@ -6,19 +6,28 @@ import { Pool } from "pg";
 import { drizzle as drizzlePg } from "drizzle-orm/node-postgres";
 import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
-import * as schema from "./schema";
-import { EXAMPLE_PROBLEMS } from "./seed";
+import * as schema from "./schema.ts";
+import { EXAMPLE_PROBLEMS } from "./seed.ts";
 
 export type DB = PgliteDatabase<typeof schema>;
 
 const g = globalThis as unknown as { __th2600db?: Promise<DB> };
 
-// A Cloudflare Worker must not reuse a database connection between requests, so with DATABASE_URL
+// Next.js only inlines the direct process.env.PREVIEW_BUILD reference.
+export function hostedUrl(env: Record<string, string | undefined> = {
+  PREVIEW_BUILD: process.env.PREVIEW_BUILD,
+  PREVIEW_DATABASE_URL: process.env.PREVIEW_DATABASE_URL,
+  DATABASE_URL: process.env.DATABASE_URL,
+}): string | undefined {
+  return (env.PREVIEW_BUILD === "1" && env.PREVIEW_DATABASE_URL) || env.DATABASE_URL;
+}
+
+// A Cloudflare Worker must not reuse a database connection between requests, so with a hosted URL
 // set we make a new pool per request: `cache` from react keeps one client for a request and
 // nothing is cached on globalThis. Follows the OpenNext Cloudflare database howto
 // (opennext.js.org/cloudflare/howtos/db).
 const hostedDb = cache(async (): Promise<DB> => {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL, maxUses: 1 });
+  const pool = new Pool({ connectionString: hostedUrl(), maxUses: 1 });
   return drizzlePg({ client: pool, schema }) as unknown as DB;
 });
 
@@ -35,11 +44,11 @@ async function open(): Promise<DB> {
 }
 
 /**
- * With DATABASE_URL set, connects to that Postgres per request (run `npm run db:migrate` first).
+ * With a hosted URL, connects to that Postgres per request (run `npm run db:migrate` first).
  * Without it, opens the embedded Postgres in ./.data so the app runs locally with no setup.
  */
 export function getDb(): Promise<DB> {
-  if (process.env.DATABASE_URL) {
+  if (hostedUrl()) {
     return hostedDb();
   }
   return (g.__th2600db ??= open());
